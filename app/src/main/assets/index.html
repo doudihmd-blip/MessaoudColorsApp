@@ -395,6 +395,40 @@ function renderAll(){
 
  document.getElementById('cli-tb').innerHTML = db.clients.map(c=>`<tr><td>${c.name}<br><small style="color:var(--mut)">${c.nif}</small></td><td>${c.phone}</td><td style="color:var(--danger);font-weight:bold">${c.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--sec)" onclick="payClientDebt(${c.id})">تسديد</button></td></tr>`).join('');
  document.getElementById('sup-tb').innerHTML = db.suppliers.map(s=>`<tr><td>${s.name}</td><td>${s.phone}</td><td style="color:#3b82f6;font-weight:bold">${s.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--pri);color:#000" onclick="paySupDebt(${s.id})">دفع</button></td></tr>`).join('') || '<tr><td colspan="4">لا يوجد موردين</td></tr>';
+// إصلاح دالة إدراج عناصر الفاتورة والحفظ لتجنب مشكلة "الفاتورة فارغة!"
+window.addItemToInvoice = function() {
+    let selectStock = document.getElementById('stockSelect'); // أو حقل المخزون لديك
+    let manualInput = document.getElementById('manualItemInput'); // حقل الكتابة اليدوية
+    let priceInput = document.getElementById('priceInput');
+    let qtyInput = document.getElementById('qtyInput');
+
+    let itemName = '';
+    if (selectStock && selectStock.value) {
+        itemName = selectStock.options[selectStock.selectedIndex].text;
+    } else if (manualInput) {
+        itemName = manualInput.value.trim();
+    }
+
+    let price = parseFloat(priceInput ? priceInput.value : 0) || 0;
+    let qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+
+    if (!itemName || itemName.includes("اختر")) {
+        alert("يرجى اختيار سلعة أو كتابة بند صالح!");
+        return;
+    }
+
+    if (typeof invoiceItems === 'undefined') {
+        window.invoiceItems = [];
+    }
+
+    invoiceItems.push({ name: itemName, price: price, qty: qty, total: price * qty });
+    
+    if (typeof renderInvoiceTable === 'function') {
+        renderInvoiceTable();
+    } else if (typeof renderAll === 'function') {
+        renderAll();
+    }
+};
 }
 renderAll();
 </script>
