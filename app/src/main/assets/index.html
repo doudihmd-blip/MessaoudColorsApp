@@ -1,106 +1,402 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Messaoud Colors</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Messaoud Colors Pro</title>
 <style>
-*{box-sizing:border-box;font-family:sans-serif;margin:0;padding:0}
-body{background:#0f172a;color:#f8fafc;padding-bottom:70px}
-header{background:#d97706;padding:16px;text-align:center}
-.tab{display:none;padding:15px}.tab.active{display:block}
-.card{background:#1e293b;border-radius:10px;padding:15px;margin-bottom:15px}
-h3{color:#fbbf24;margin-bottom:10px;font-size:1.05rem}
-label{display:block;margin:8px 0 4px;font-size:.9rem;color:#cbd5e1}
-input,select{width:100%;padding:10px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff}
-button{width:100%;padding:12px;background:#d97706;color:#fff;border:none;border-radius:6px;font-weight:bold;margin-top:12px}
-.res{background:#0f172a;padding:12px;border-radius:6px;margin-top:12px;border-right:4px solid #d97706}
-.nav{position:fixed;bottom:0;width:100%;background:#1e293b;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #334155}
-.nav button{background:none;width:auto;margin:0;padding:6px;color:#94a3b8}
-.nav button.active{color:#fbbf24}
-.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #334155;font-size:.9rem}
+:root{--bg:#0f172a;--card:#1e293b;--pri:#f59e0b;--sec:#10b981;--danger:#ef4444;--txt:#f8fafc;--mut:#94a3b8;--brd:#334155}
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);padding-bottom:75px;font-size:14px}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:14px 16px;border-bottom:2px solid var(--pri);display:flex;justify-content:space-between;align-items:center}
+.brand h1{font-size:1.15rem;color:var(--pri)}
+.brand p{font-size:.75rem;color:var(--mut)}
+.badge{background:var(--pri);color:#000;padding:4px 8px;border-radius:6px;font-weight:bold;font-size:.75rem}
+.tab{display:none;padding:12px}.tab.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:var(--card);padding:12px;border-radius:10px;border-right:4px solid var(--pri)}
+.stat h4{font-size:.75rem;color:var(--mut);margin-bottom:4px}
+.stat div{font-size:1.1rem;font-weight:bold;color:#fff}
+.card{background:var(--card);border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid var(--brd)}
+.card h3{color:var(--pri);font-size:1rem;margin-bottom:10px;border-bottom:1px solid var(--brd);padding-bottom:6px;display:flex;justify-content:space-between}
+label{display:block;margin:8px 0 3px;font-size:.8rem;color:var(--mut)}
+input,select{width:100%;padding:9px;border-radius:6px;border:1px solid var(--brd);background:#090d16;color:#fff;font-size:.9rem}
+.row-inp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{width:100%;padding:10px;background:var(--pri);color:#000;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:.9rem}
+button.sec{background:var(--sec);color:#fff}
+button.del{background:var(--danger);color:#fff;width:auto;padding:4px 8px;margin:0;font-size:.75rem}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.82rem}
+th,td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--brd)}
+th{color:var(--pri);background:#090d16}
+.nav{position:fixed;bottom:0;width:100%;background:#090d16;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid var(--brd);z-index:99}
+.nav button{background:none;color:var(--mut);margin:0;padding:4px;font-size:.75rem;display:flex;flex-direction:column;align-items:center;width:auto}
+.nav button.active{color:var(--pri);font-weight:bold}
+@media print{
+ body *{visibility:hidden}
+ #printArea,#printArea *{visibility:visible}
+ #printArea{position:absolute;left:0;top:0;width:100%;background:#fff;color:#000;padding:20px}
+}
 </style>
 </head>
 <body>
-<header><h2>Messaoud Colors - Casa Decor</h2><p>مسعود العاتي - نظام حرفيي الدهانات</p></header>
-<div id="t1" class="tab active"><div class="card">
-<h3>حاسبة المساحات والدهان</h3>
-<label>الطول (م):</label><input type="number" id="l" value="5">
-<label>العرض (م):</label><input type="number" id="w" value="4">
-<label>الارتفاع (م):</label><input type="number" id="h" value="2.8">
-<label>خصم الأبواب والنوافذ (م²):</label><input type="number" id="d" value="4">
-<label>نوع الدهان:</label>
-<select id="rate">
-<option value="10">فينيل / أكريليك (10 م²/كغ)</option>
-<option value="12">ساتيني Satiné (12 م²/لتر)</option>
-<option value="4">معجون لاندوي Enduit (4 م²/كغ)</option>
-<option value="6">ديكور سابلي / ستوكو (6 م²/لتر)</option>
-</select>
-<label>عدد الأوجه (Couches):</label><input type="number" id="c" value="2">
-<button onclick="calc()">احسب الكمية</button>
-<div id="r1" class="res" style="display:none"></div>
-</div></div>
 
-<div id="t2" class="tab"><div class="card">
-<h3>إصدار كشف سعر Devis (د.ج)</h3>
-<label>اسم الزبون:</label><input type="text" id="cn" placeholder="اسم الزبون">
-<label>نوع الأشغال:</label>
-<select id="wt">
-<option value="لاندوي ودهان فينيل">لاندوي ودهان فينيل</option>
-<option value="دهان ساتيني Satiné">دهان ساتيني Satiné</option>
-<option value="ديكور سابلي / ستوكو">ديكور سابلي / ستوكو</option>
-<option value="ورنيش أخشاب Vernis">ورنيش أخشاب Vernis</option>
-<option value="كراب واجهات Crépi">كراب واجهات Crépi</option>
-</select>
-<label>المساحة (م²):</label><input type="number" id="da" placeholder="100">
-<label>سعر المتر المربع (د.ج):</label><input type="number" id="dp" placeholder="650">
-<button onclick="addD()">إضافة للكشف</button>
-<div id="dl" class="res">لا توجد بنود بعد</div>
-<button onclick="copyD()" style="background:#10b981">نسخ الفاتورة لواتساب</button>
-</div></div>
+<header>
+ <div class="brand">
+  <h1>MESSAOUD COLORS - ERP</h1>
+  <p>النظام التجاري المتكامل للتسيير والفوترة</p>
+ </div>
+ <span class="badge">النسخة الرسمية</span>
+</header>
 
-<div id="t3" class="tab"><div class="card">
-<h3>دليل الورشة للتخفيف والفرد</h3>
-<div class="row"><span>الساتيني (Satiné):</span><span>ماء 10% - 15%</span></div>
-<div class="row"><span>لاكي سليلوزي:</span><span>ديليون 20% - 30%</span></div>
-<div class="row"><span>ورنيش PU:</span><span>مصلب 50% + مخفف 15%</span></div>
-<div class="row"><span>فوهة الفرد للورنيش:</span><span>1.3 - 1.4 mm</span></div>
-<div class="row"><span>فوهة الفرد للأكريليك:</span><span>1.8 - 2.0 mm</span></div>
-</div></div>
+<!-- 1. لوحة القيادة -->
+<div id="t-dash" class="tab active">
+ <div class="grid2">
+  <div class="stat"><h4>إجمالي المبيعات</h4><div id="st-sales">0 د.ج</div></div>
+  <div class="stat" style="border-color:var(--sec)"><h4>قيمة المخزون (الشراء)</h4><div id="st-stock">0 د.ج</div></div>
+  <div class="stat" style="border-color:var(--danger)"><h4>ديون عند الزبائن (Crédit)</h4><div id="st-cdebt">0 د.ج</div></div>
+  <div class="stat" style="border-color:#3b82f6"><h4>مستحقات الشركات (Fournisseurs)</h4><div id="st-sdebt">0 د.ج</div></div>
+ </div>
+ <div class="card">
+  <h3><span>تنبيهات المخزون المنخفض</span></h3>
+  <table><thead><tr><th>المنتج</th><th>الكمية المتبقية</th><th>سعر البيع</th></tr></thead><tbody id="low-stock-tb"></tbody></table>
+ </div>
+ <div class="card">
+  <h3><span>آخر الفواتير والعروض المصدرة</span></h3>
+  <table><thead><tr><th>النوع</th><th>الزبون/الشركه</th><th>المبلغ</th><th>إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
+ </div>
+</div>
+
+<!-- 2. المخزون والسلع -->
+<div id="t-stock" class="tab">
+ <div class="card">
+  <h3>إضافة منتج جديد للمخزون</h3>
+  <label>اسم السلعة / المادة:</label>
+  <input id="p-name" placeholder="أدخل اسم السلعة...">
+  <div class="row-inp">
+   <div><label>سعر الشراء (د.ج):</label><input type="number" id="p-buy" placeholder="0"></div>
+   <div><label>سعر البيع (د.ج):</label><input type="number" id="p-sell" placeholder="0"></div>
+  </div>
+  <div class="row-inp">
+   <div><label>الكمية المتوفرة:</label><input type="number" id="p-qty" placeholder="0"></div>
+   <div><label>حد التنبيه:</label><input type="number" id="p-min" value="5"></div>
+  </div>
+  <button onclick="addProduct()">+ إضافة للمخزون</button>
+ </div>
+ <div class="card">
+  <h3>جرد المخزون (<span id="stock-count">0</span> صنف)</h3>
+  <input id="search-stock" placeholder="🔍 بحث في السلع..." oninput="renderAll()" style="margin-bottom:8px">
+  <table><thead><tr><th>السلعة</th><th>الكمية</th><th>الشراء</th><th>البيع</th><th>حذف</th></tr></thead><tbody id="stock-tb"></tbody></table>
+ </div>
+</div>
+
+<!-- 3. الفواتير والبروفرما -->
+<div id="t-inv" class="tab">
+ <div class="card">
+  <h3>إصدار وثيقة (Proforma / Facture / BL)</h3>
+  <div class="row-inp">
+   <div>
+    <label>نوع الوثيقة:</label>
+    <select id="inv-type">
+     <option value="فاتورة شكلية - FACTURE PROFORMA">فاتورة شكلية (Proforma)</option>
+     <option value="فاتورة نهائية - FACTURE">فاتورة بيع (Facture)</option>
+     <option value="وصل تسليم - BON DE LIVRAISON">وصل تسليم (Bon de Livraison)</option>
+    </select>
+   </div>
+   <div>
+    <label>اختر الزبون / الشركة:</label>
+    <select id="inv-client"></select>
+   </div>
+  </div>
+  <div class="row-inp">
+   <div>
+    <label>اختر من المخزون:</label>
+    <select id="inv-prod" onchange="fillProdPrice()"></select>
+   </div>
+   <div>
+    <label>أو كتابة بند يدوي:</label>
+    <input id="inv-custom" placeholder="اسم سلعة أو خدمة...">
+   </div>
+  </div>
+  <div class="row-inp">
+   <div><label>الكمية:</label><input type="number" id="inv-qty" value="1"></div>
+   <div><label>سعر الوحدة (د.ج):</label><input type="number" id="inv-price"></div>
+  </div>
+  <button onclick="addInvItem()">+ إدراج في الوثيقة</button>
+
+  <table style="margin-top:12px"><thead><tr><th>البيان</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th></th></tr></thead><tbody id="curr-inv-tb"></tbody></table>
+
+  <div class="row-inp" style="margin-top:10px">
+   <div>
+    <label>الضريبة TVA:</label>
+    <select id="inv-tva" onchange="renderCurrInv()">
+     <option value="0">بدون ضريبة (0% HT)</option>
+     <option value="19">مع الضريبة (19% TVA)</option>
+    </select>
+   </div>
+   <div>
+    <label>المبلغ المدفوع (Versement):</label><input type="number" id="inv-paid" value="0" oninput="renderCurrInv()">
+   </div>
+  </div>
+  <div id="inv-totals" style="margin-top:10px;padding:10px;background:#090d16;border-radius:6px;line-height:1.7"></div>
+  <div class="row-inp">
+   <button class="sec" onclick="saveAndPrintInv(true)">🖨️ حفظ وطباعة PDF</button>
+   <button onclick="saveAndPrintInv(false)">💾 حفظ فقط</button>
+  </div>
+ </div>
+</div>
+
+<!-- 4. الزبائن والديون -->
+<div id="t-cli" class="tab">
+ <div class="card">
+  <h3>إضافة زبون / مؤسسة جديدة</h3>
+  <input id="c-name" placeholder="اسم الزبون أو الشركة...">
+  <div class="row-inp">
+   <div><label>رقم الهاتف:</label><input id="c-phone" placeholder="0660..."></div>
+   <div><label>الدين السابق (Crédit):</label><input type="number" id="c-debt" value="0"></div>
+  </div>
+  <label>رقم السجل / التعريف الجبائي (اختياري للشركات):</label>
+  <input id="c-nif" placeholder="RC / NIF / AI">
+  <button onclick="addClient()">+ إضافة الزبون</button>
+ </div>
+ <div class="card">
+  <h3>قائمة الزبائن والديون</h3>
+  <table><thead><tr><th>الزبون</th><th>الهاتف</th><th>الدين</th><th>تسديد</th></tr></thead><tbody id="cli-tb"></tbody></table>
+ </div>
+</div>
+
+<!-- 5. الموردين والشركات -->
+<div id="t-sup" class="tab">
+ <div class="card">
+  <h3>إضافة مورد أو مصنع</h3>
+  <input id="s-name" placeholder="اسم الشركة أو الموزع...">
+  <div class="row-inp">
+   <div><label>الهاتف:</label><input id="s-phone" placeholder="0550..."></div>
+   <div><label>مستحقاتهم (الدين لهم):</label><input type="number" id="s-debt" value="0"></div>
+  </div>
+  <button onclick="addSupplier()">+ إضافة المورد</button>
+ </div>
+ <div class="card">
+  <h3>دفتر الموردين والشركات</h3>
+  <table><thead><tr><th>الشركة</th><th>الهاتف</th><th>المستحقات</th><th>دفع</th></tr></thead><tbody id="sup-tb"></tbody></table>
+ </div>
+</div>
+
+<!-- منطقة الطباعة الرسمية -->
+<div id="printArea" style="display:none"></div>
 
 <div class="nav">
-<button class="active" onclick="sw('t1',this)">الحاسبة</button>
-<button onclick="sw('t2',this)">كشف Devis</button>
-<button onclick="sw('t3',this)">دليل الورشة</button>
+ <button class="active" onclick="nav('t-dash',this)">📊 الرئيسية</button>
+ <button onclick="nav('t-stock',this)">📦 المخزون</button>
+ <button onclick="nav('t-inv',this)">🧾 الفواتير</button>
+ <button onclick="nav('t-cli',this)">👥 الزبائن</button>
+ <button onclick="nav('t-sup',this)">🚛 الموردين</button>
 </div>
+
 <script>
-let items=[];
-function sw(id,b){
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
- document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
- document.getElementById(id).classList.add('active');b.classList.add('active');
+let db = JSON.parse(localStorage.getItem('messaoudColorsERP')) || {
+ products: [],
+ clients: [{id:1, name:'زبون نقدي (Comptoir)', phone:'-', debt:0, nif:''}],
+ suppliers: [],
+ invoices: []
+};
+let currItems = [];
+
+function saveDB(){ localStorage.setItem('messaoudColorsERP', JSON.stringify(db)); renderAll(); }
+
+function nav(id, btn){
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ btn.classList.add('active');
 }
-function calc(){
- let l=+document.getElementById('l').value||0,w=+document.getElementById('w').value||0,
- h=+document.getElementById('h').value||0,d=+document.getElementById('d').value||0,
- r=+document.getElementById('rate').value,c=+document.getElementById('c').value||1;
- let walls=((l+w)*2)*h,ceil=l*w,net=Math.max(0,walls+ceil-d),need=((net*c)/r).toFixed(1);
- let bx=document.getElementById('r1');bx.style.display='block';
- bx.innerHTML='الجدران: '+walls.toFixed(1)+' م²<br>السقف: '+ceil.toFixed(1)+' م²<br>الصافي: '+net.toFixed(1)+' م²<br><b style="color:#fbbf24">الكمية المطلوبة: '+need+' كغ/لتر</b>';
+
+function addProduct(){
+ let name=document.getElementById('p-name').value.trim();
+ let buy=+document.getElementById('p-buy').value||0;
+ let sell=+document.getElementById('p-sell').value||0;
+ let qty=+document.getElementById('p-qty').value||0;
+ let min=+document.getElementById('p-min').value||5;
+ if(!name||sell<=0) return alert('أدخل اسم السلعة وسعر البيع على الأقل');
+ db.products.push({id:Date.now(), name, buy, sell, qty, min});
+ document.getElementById('p-name').value=''; document.getElementById('p-buy').value=''; document.getElementById('p-sell').value=''; document.getElementById('p-qty').value='';
+ saveDB();
 }
-function addD(){
- let w=document.getElementById('wt').value,a=+document.getElementById('da').value||0,p=+document.getElementById('dp').value||0;
- if(a>0&&p>0){items.push({w,a,p,t:a*p});renderD();}
+
+function delProd(id){ db.products=db.products.filter(p=>p.id!==id); saveDB(); }
+
+function addClient(){
+ let name=document.getElementById('c-name').value.trim();
+ let phone=document.getElementById('c-phone').value.trim()||'-';
+ let debt=+document.getElementById('c-debt').value||0;
+ let nif=document.getElementById('c-nif').value.trim()||'';
+ if(!name) return;
+ db.clients.push({id:Date.now(), name, phone, debt, nif});
+ document.getElementById('c-name').value=''; document.getElementById('c-debt').value='0'; document.getElementById('c-nif').value='';
+ saveDB();
 }
-function renderD(){
- let s=0,h='';
- items.forEach(i=>{s+=i.t;h+='<div class="row"><span>'+i.w+' ('+i.a+'م²)</span><b>'+i.t.toLocaleString()+' د.ج</b></div>';});
- h+='<div style="margin-top:8px;color:#10b981;font-weight:bold">المجموع: '+s.toLocaleString()+' د.ج</div>';
- document.getElementById('dl').innerHTML=h;
+
+function payClientDebt(id){
+ let amt = prompt('المبلغ المسدد من الزبون (د.ج):');
+ if(amt && +amt>0){
+  let c = db.clients.find(x=>x.id===id);
+  if(c){ c.debt = Math.max(0, c.debt - (+amt)); saveDB(); }
+ }
 }
-function copyD(){
- let c=document.getElementById('cn').value||'زبوننا الكريم',s=0,t='*Messaoud Colors - Casa Decor*\nالزبون: '+c+'\n---\n';
- items.forEach(i=>{s+=i.t;t+='- '+i.w+': '+i.a+'م² × '+i.p+' = '+i.t.toLocaleString()+' د.ج\n';});
- t+='---\n*المجموع الكلي: '+s.toLocaleString()+' د.ج*\nمسعود العاتي';
- navigator.clipboard.writeText(t).then(()=>alert('تم نسخ الفاتورة!'));
+
+function addSupplier(){
+ let name=document.getElementById('s-name').value.trim();
+ let phone=document.getElementById('s-phone').value.trim()||'-';
+ let debt=+document.getElementById('s-debt').value||0;
+ if(!name) return;
+ db.suppliers.push({id:Date.now(), name, phone, debt});
+ document.getElementById('s-name').value=''; document.getElementById('s-debt').value='0';
+ saveDB();
 }
-</script></body></html>
+
+function paySupDebt(id){
+ let amt = prompt('المبلغ المدفوع للمورد (د.ج):');
+ if(amt && +amt>0){
+  let s = db.suppliers.find(x=>x.id===id);
+  if(s){ s.debt = Math.max(0, s.debt - (+amt)); saveDB(); }
+ }
+}
+
+function fillProdPrice(){
+ let pid = +document.getElementById('inv-prod').value;
+ let p = db.products.find(x=>x.id===pid);
+ if(p) document.getElementById('inv-price').value = p.sell;
+}
+
+function addInvItem(){
+ let custom = document.getElementById('inv-custom').value.trim();
+ let pid = +document.getElementById('inv-prod').value;
+ let p = db.products.find(x=>x.id===pid);
+ let name = custom ? custom : (p ? p.name : '');
+ let qty = +document.getElementById('inv-qty').value||1;
+ let price = +document.getElementById('inv-price').value||0;
+ if(!name || price<=0) return alert('اختر سلعة أو اكتب السعر');
+ currItems.push({pid: custom?null:pid, name, qty, price, total: qty*price});
+ document.getElementById('inv-custom').value='';
+ renderCurrInv();
+}
+
+function renderCurrInv(){
+ let tb = document.getElementById('curr-inv-tb');
+ let ht = 0, html = '';
+ currItems.forEach((it, idx)=>{
+  ht += it.total;
+  html += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price.toLocaleString()}</td><td>${it.total.toLocaleString()}</td><td><button class="del" onclick="currItems.splice(${idx},1);renderCurrInv()">X</button></td></tr>`;
+ });
+ tb.innerHTML = html;
+ let tvaRate = +document.getElementById('inv-tva').value;
+ let tva = Math.round(ht * (tvaRate/100));
+ let ttc = ht + tva;
+ document.getElementById('inv-paid').value = document.getElementById('inv-paid').value || ttc;
+ let paid = +document.getElementById('inv-paid').value||0;
+ let rest = Math.max(0, ttc - paid);
+ document.getElementById('inv-totals').innerHTML = `
+  <div>المجموع HT: <b>${ht.toLocaleString()} د.ج</b></div>
+  <div>الضريبة TVA (${tvaRate}%): <b>${tva.toLocaleString()} د.ج</b></div>
+  <div style="color:var(--pri);font-size:1.05rem">المجموع الكلي TTC: <b>${ttc.toLocaleString()} د.ج</b></div>
+  <div style="color:var(--danger)">الباقي للدفع (Reste): <b>${rest.toLocaleString()} د.ج</b></div>
+ `;
+}
+
+function saveAndPrintInv(doPrint){
+ if(currItems.length===0) return alert('الفاتورة فارغة!');
+ let type = document.getElementById('inv-type').value;
+ let cid = +document.getElementById('inv-client').value;
+ let client = db.clients.find(x=>x.id===cid) || db.clients[0];
+ let ht = currItems.reduce((a,b)=>a+b.total, 0);
+ let tvaRate = +document.getElementById('inv-tva').value;
+ let ttc = ht + Math.round(ht*(tvaRate/100));
+ let paid = +document.getElementById('inv-paid').value||0;
+ let rest = Math.max(0, ttc - paid);
+
+ if(!type.includes('PROFORMA')){
+  currItems.forEach(it=>{
+   if(it.pid){
+    let pr = db.products.find(x=>x.id===it.pid);
+    if(pr) pr.qty = Math.max(0, pr.qty - it.qty);
+   }
+  });
+  if(rest > 0) client.debt += rest;
+ }
+
+ let inv = {
+  id: Date.now(),
+  num: 'N° ' + (db.invoices.length + 1) + '/2026',
+  date: new Date().toLocaleDateString('ar-DZ'),
+  type, clientName: client.name, clientNif: client.nif,
+  items: [...currItems], ht, tvaRate, ttc, paid, rest
+ };
+ db.invoices.unshift(inv);
+ currItems = [];
+ renderCurrInv();
+ saveDB();
+ if(doPrint) printInvoice(inv.id);
+ else alert('تم الحفظ بنجاح!');
+}
+
+function printInvoice(id){
+ let inv = db.invoices.find(x=>x.id===id);
+ if(!inv) return;
+ let rows = inv.items.map((it,i)=>`<tr><td style="border:1px solid #000;padding:6px">${i+1}</td><td style="border:1px solid #000;padding:6px">${it.name}</td><td style="border:1px solid #000;padding:6px">${it.qty}</td><td style="border:1px solid #000;padding:6px">${it.price.toLocaleString()} د.ج</td><td style="border:1px solid #000;padding:6px">${it.total.toLocaleString()} د.ج</td></tr>`).join('');
+ let pa = document.getElementById('printArea');
+ pa.style.display = 'block';
+ pa.innerHTML = `
+  <div style="border:2px solid #000;padding:15px;direction:rtl;font-family:sans-serif;color:#000;background:#fff">
+   <div style="display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:10px">
+    <div><h2 style="margin:0">MESSAOUD COLORS - ERP</h2><p>النظام التجاري المحترف</p></div>
+    <div style="text-align:left"><h3>${inv.type}</h3><p>رقم: ${inv.num}</p><p>التاريخ: ${inv.date}</p></div>
+   </div>
+   <div style="margin:12px 0;padding:8px;border:1px solid #000">
+    <strong>الزبون:</strong> ${inv.clientName} ${inv.clientNif ? ' | <strong>NIF:</strong> '+inv.clientNif : ''}
+   </div>
+   <table style="width:100%;border-collapse:collapse;margin:10px 0;color:#000">
+    <thead><tr style="background:#eee"><th style="border:1px solid #000;padding:6px">#</th><th style="border:1px solid #000;padding:6px">البيان (Désignation)</th><th style="border:1px solid #000;padding:6px">الكمية</th><th style="border:1px solid #000;padding:6px">سعر الوحدة</th><th style="border:1px solid #000;padding:6px">الإجمالي</th></tr></thead>
+    <tbody>${rows}</tbody>
+   </table>
+   <div style="width:260px;margin-right:auto;border:1px solid #000;padding:8px;line-height:1.6">
+    <div>المجموع HT: <b>${inv.ht.toLocaleString()} د.ج</b></div>
+    <div>الضريبة TVA (${inv.tvaRate}%): <b>${(inv.ttc-inv.ht).toLocaleString()} د.ج</b></div>
+    <div style="font-size:1.1rem;border-top:1px solid #000">المجموع TTC: <b>${inv.ttc.toLocaleString()} د.ج</b></div>
+   </div>
+   <div style="margin-top:30px;display:flex;justify-content:space-between">
+    <div>إمضاء الزبون:</div>
+    <div>ختم وإمضاء المؤسسة:</div>
+   </div>
+  </div>
+ `;
+ window.print();
+ setTimeout(()=>{ pa.style.display='none'; }, 1000);
+}
+
+function renderAll(){
+ let totalSales = db.invoices.filter(i=>!i.type.includes('PROFORMA')).reduce((a,b)=>a+b.ttc, 0);
+ let stockVal = db.products.reduce((a,b)=>a+(b.buy*b.qty), 0);
+ let cDebt = db.clients.reduce((a,b)=>a+b.debt, 0);
+ let sDebt = db.suppliers.reduce((a,b)=>a+b.debt, 0);
+ document.getElementById('st-sales').innerText = totalSales.toLocaleString() + ' د.ج';
+ document.getElementById('st-stock').innerText = stockVal.toLocaleString() + ' د.ج';
+ document.getElementById('st-cdebt').innerText = cDebt.toLocaleString() + ' د.ج';
+ document.getElementById('st-sdebt').innerText = sDebt.toLocaleString() + ' د.ج';
+
+ document.getElementById('low-stock-tb').innerHTML = db.products.filter(p=>p.qty<=p.min).map(p=>`<tr><td>${p.name}</td><td style="color:var(--danger);font-weight:bold">${p.qty}</td><td>${p.sell.toLocaleString()} د.ج</td></tr>`).join('') || '<tr><td colspan="3">المخزون بحالة ممتازة</td></tr>';
+
+ document.getElementById('recent-inv-tb').innerHTML = db.invoices.slice(0,10).map(i=>`<tr><td>${i.type.split('-')[0]}</td><td>${i.clientName}</td><td>${i.ttc.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--pri);color:#000" onclick="printInvoice(${i.id})">طباعة</button></td></tr>`).join('') || '<tr><td colspan="4">لا توجد فواتير بعد</td></tr>';
+
+ let q = (document.getElementById('search-stock').value||'').toLowerCase();
+ let flt = db.products.filter(p=>p.name.toLowerCase().includes(q));
+ document.getElementById('stock-count').innerText = db.products.length;
+ document.getElementById('stock-tb').innerHTML = flt.map(p=>`<tr><td>${p.name}</td><td style="font-weight:bold;color:${p.qty<=p.min?'var(--danger)':'var(--sec)'}">${p.qty}</td><td>${p.buy.toLocaleString()}</td><td>${p.sell.toLocaleString()}</td><td><button class="del" onclick="delProd(${p.id})">X</button></td></tr>`).join('') || '<tr><td colspan="5">لا توجد سلع في المخزون</td></tr>';
+
+ document.getElementById('inv-client').innerHTML = db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+ document.getElementById('inv-prod').innerHTML = '<option value="">-- اختر من المخزون --</option>' + db.products.map(p=>`<option value="${p.id}">${p.name} (متوفر: ${p.qty})</option>`).join('');
+
+ document.getElementById('cli-tb').innerHTML = db.clients.map(c=>`<tr><td>${c.name}<br><small style="color:var(--mut)">${c.nif}</small></td><td>${c.phone}</td><td style="color:var(--danger);font-weight:bold">${c.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--sec)" onclick="payClientDebt(${c.id})">تسديد</button></td></tr>`).join('');
+ document.getElementById('sup-tb').innerHTML = db.suppliers.map(s=>`<tr><td>${s.name}</td><td>${s.phone}</td><td style="color:#3b82f6;font-weight:bold">${s.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--pri);color:#000" onclick="paySupDebt(${s.id})">دفع</button></td></tr>`).join('') || '<tr><td colspan="4">لا يوجد موردين</td></tr>';
+}
+renderAll();
+</script>
+</body>
+</html>
