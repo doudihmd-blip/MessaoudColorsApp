@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Messaoud Colors</title>
+<style>
+*{box-sizing:border-box;font-family:sans-serif;margin:0;padding:0}
+body{background:#0f172a;color:#f8fafc;padding-bottom:70px}
+header{background:#d97706;padding:16px;text-align:center}
+.tab{display:none;padding:15px}.tab.active{display:block}
+.card{background:#1e293b;border-radius:10px;padding:15px;margin-bottom:15px}
+h3{color:#fbbf24;margin-bottom:10px;font-size:1.05rem}
+label{display:block;margin:8px 0 4px;font-size:.9rem;color:#cbd5e1}
+input,select{width:100%;padding:10px;border-radius:6px;border:1px solid #475569;background:#0f172a;color:#fff}
+button{width:100%;padding:12px;background:#d97706;color:#fff;border:none;border-radius:6px;font-weight:bold;margin-top:12px}
+.res{background:#0f172a;padding:12px;border-radius:6px;margin-top:12px;border-right:4px solid #d97706}
+.nav{position:fixed;bottom:0;width:100%;background:#1e293b;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #334155}
+.nav button{background:none;width:auto;margin:0;padding:6px;color:#94a3b8}
+.nav button.active{color:#fbbf24}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #334155;font-size:.9rem}
+</style>
+</head>
+<body>
+<header><h2>Messaoud Colors - Casa Decor</h2><p>مسعود العاتي - نظام حرفيي الدهانات</p></header>
+<div id="t1" class="tab active"><div class="card">
+<h3>حاسبة المساحات والدهان</h3>
+<label>الطول (م):</label><input type="number" id="l" value="5">
+<label>العرض (م):</label><input type="number" id="w" value="4">
+<label>الارتفاع (م):</label><input type="number" id="h" value="2.8">
+<label>خصم الأبواب والنوافذ (م²):</label><input type="number" id="d" value="4">
+<label>نوع الدهان:</label>
+<select id="rate">
+<option value="10">فينيل / أكريليك (10 م²/كغ)</option>
+<option value="12">ساتيني Satiné (12 م²/لتر)</option>
+<option value="4">معجون لاندوي Enduit (4 م²/كغ)</option>
+<option value="6">ديكور سابلي / ستوكو (6 م²/لتر)</option>
+</select>
+<label>عدد الأوجه (Couches):</label><input type="number" id="c" value="2">
+<button onclick="calc()">احسب الكمية</button>
+<div id="r1" class="res" style="display:none"></div>
+</div></div>
+
+<div id="t2" class="tab"><div class="card">
+<h3>إصدار كشف سعر Devis (د.ج)</h3>
+<label>اسم الزبون:</label><input type="text" id="cn" placeholder="اسم الزبون">
+<label>نوع الأشغال:</label>
+<select id="wt">
+<option value="لاندوي ودهان فينيل">لاندوي ودهان فينيل</option>
+<option value="دهان ساتيني Satiné">دهان ساتيني Satiné</option>
+<option value="ديكور سابلي / ستوكو">ديكور سابلي / ستوكو</option>
+<option value="ورنيش أخشاب Vernis">ورنيش أخشاب Vernis</option>
+<option value="كراب واجهات Crépi">كراب واجهات Crépi</option>
+</select>
+<label>المساحة (م²):</label><input type="number" id="da" placeholder="100">
+<label>سعر المتر المربع (د.ج):</label><input type="number" id="dp" placeholder="650">
+<button onclick="addD()">إضافة للكشف</button>
+<div id="dl" class="res">لا توجد بنود بعد</div>
+<button onclick="copyD()" style="background:#10b981">نسخ الفاتورة لواتساب</button>
+</div></div>
+
+<div id="t3" class="tab"><div class="card">
+<h3>دليل الورشة للتخفيف والفرد</h3>
+<div class="row"><span>الساتيني (Satiné):</span><span>ماء 10% - 15%</span></div>
+<div class="row"><span>لاكي سليلوزي:</span><span>ديليون 20% - 30%</span></div>
+<div class="row"><span>ورنيش PU:</span><span>مصلب 50% + مخفف 15%</span></div>
+<div class="row"><span>فوهة الفرد للورنيش:</span><span>1.3 - 1.4 mm</span></div>
+<div class="row"><span>فوهة الفرد للأكريليك:</span><span>1.8 - 2.0 mm</span></div>
+</div></div>
+
+<div class="nav">
+<button class="active" onclick="sw('t1',this)">الحاسبة</button>
+<button onclick="sw('t2',this)">كشف Devis</button>
+<button onclick="sw('t3',this)">دليل الورشة</button>
+</div>
+<script>
+let items=[];
+function sw(id,b){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');b.classList.add('active');
+}
+function calc(){
+ let l=+document.getElementById('l').value||0,w=+document.getElementById('w').value||0,
+ h=+document.getElementById('h').value||0,d=+document.getElementById('d').value||0,
+ r=+document.getElementById('rate').value,c=+document.getElementById('c').value||1;
+ let walls=((l+w)*2)*h,ceil=l*w,net=Math.max(0,walls+ceil-d),need=((net*c)/r).toFixed(1);
+ let bx=document.getElementById('r1');bx.style.display='block';
+ bx.innerHTML='الجدران: '+walls.toFixed(1)+' م²<br>السقف: '+ceil.toFixed(1)+' م²<br>الصافي: '+net.toFixed(1)+' م²<br><b style="color:#fbbf24">الكمية المطلوبة: '+need+' كغ/لتر</b>';
+}
+function addD(){
+ let w=document.getElementById('wt').value,a=+document.getElementById('da').value||0,p=+document.getElementById('dp').value||0;
+ if(a>0&&p>0){items.push({w,a,p,t:a*p});renderD();}
+}
+function renderD(){
+ let s=0,h='';
+ items.forEach(i=>{s+=i.t;h+='<div class="row"><span>'+i.w+' ('+i.a+'م²)</span><b>'+i.t.toLocaleString()+' د.ج</b></div>';});
+ h+='<div style="margin-top:8px;color:#10b981;font-weight:bold">المجموع: '+s.toLocaleString()+' د.ج</div>';
+ document.getElementById('dl').innerHTML=h;
+}
+function copyD(){
+ let c=document.getElementById('cn').value||'زبوننا الكريم',s=0,t='*Messaoud Colors - Casa Decor*\nالزبون: '+c+'\n---\n';
+ items.forEach(i=>{s+=i.t;t+='- '+i.w+': '+i.a+'م² × '+i.p+' = '+i.t.toLocaleString()+' د.ج\n';});
+ t+='---\n*المجموع الكلي: '+s.toLocaleString()+' د.ج*\nمسعود العاتي';
+ navigator.clipboard.writeText(t).then(()=>alert('تم نسخ الفاتورة!'));
+}
+</script></body></html>
