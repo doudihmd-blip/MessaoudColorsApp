@@ -61,7 +61,7 @@ th{color:var(--pri);background:#090d16}
  </div>
  <div class="card">
   <h3><span>آخر الفواتير والعروض المصدرة</span></h3>
-  <table><thead><tr><th>النوع</th><th>الزبون/الشركه</th><th>المبلغ</th><th>إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
+  <table><thead><tr><th>النوع</th><th>الزبون/الشركة</th><th>المبلغ</th><th>إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
  </div>
 </div>
 
@@ -112,13 +112,13 @@ th{color:var(--pri);background:#090d16}
     <select id="inv-prod" onchange="fillProdPrice()"></select>
    </div>
    <div>
-    <label>أو كتابة بند يدوي:</label>
-    <input id="inv-custom" placeholder="اسم سلعة أو خدمة...">
+    <label>أو كتابة بند يدوي (اسم السلعة):</label>
+    <input id="inv-custom" placeholder="مثال: دهان ساتيني...">
    </div>
   </div>
   <div class="row-inp">
    <div><label>الكمية:</label><input type="number" id="inv-qty" value="1"></div>
-   <div><label>سعر الوحدة (د.ج):</label><input type="number" id="inv-price"></div>
+   <div><label>سعر الوحدة (د.ج):</label><input type="number" id="inv-price" placeholder="10000"></div>
   </div>
   <button onclick="addInvItem()">+ إدراج في الوثيقة</button>
 
@@ -263,19 +263,27 @@ function paySupDebt(id){
 function fillProdPrice(){
  let pid = +document.getElementById('inv-prod').value;
  let p = db.products.find(x=>x.id===pid);
- if(p) document.getElementById('inv-price').value = p.sell;
+ if(p){
+  document.getElementById('inv-price').value = p.sell;
+  document.getElementById('inv-custom').value = p.name;
+ }
 }
 
 function addInvItem(){
  let custom = document.getElementById('inv-custom').value.trim();
  let pid = +document.getElementById('inv-prod').value;
  let p = db.products.find(x=>x.id===pid);
- let name = custom ? custom : (p ? p.name : '');
+ let name = custom ? custom : (p ? p.name : 'سلعة عامة');
  let qty = +document.getElementById('inv-qty').value||1;
  let price = +document.getElementById('inv-price').value||0;
- if(!name || price<=0) return alert('اختر سلعة أو اكتب السعر');
- currItems.push({pid: custom?null:pid, name, qty, price, total: qty*price});
+ 
+ if(price <= 0) return alert('الرجاء إدخال سعر الوحدة');
+ 
+ currItems.push({pid: p?p.id:null, name, qty, price, total: qty*price});
  document.getElementById('inv-custom').value='';
+ document.getElementById('inv-prod').value='';
+ document.getElementById('inv-price').value='';
+ document.getElementById('inv-qty').value='1';
  renderCurrInv();
 }
 
@@ -302,7 +310,15 @@ function renderCurrInv(){
 }
 
 function saveAndPrintInv(doPrint){
- if(currItems.length===0) return alert('الفاتورة فارغة!');
+ let price = +document.getElementById('inv-price').value||0;
+ let custom = document.getElementById('inv-custom').value.trim();
+ if(currItems.length === 0 && price > 0){
+  if(!custom) document.getElementById('inv-custom').value = 'مبيع عام';
+  addInvItem();
+ }
+
+ if(currItems.length === 0) return alert('الفاتورة فارغة! أضف اسم السلعة والسعر ثم اضغط إدراج في الوثيقة.');
+ 
  let type = document.getElementById('inv-type').value;
  let cid = +document.getElementById('inv-client').value;
  let client = db.clients.find(x=>x.id===cid) || db.clients[0];
@@ -334,7 +350,7 @@ function saveAndPrintInv(doPrint){
  renderCurrInv();
  saveDB();
  if(doPrint) printInvoice(inv.id);
- else alert('تم الحفظ بنجاح!');
+ else alert('تم حفظ الفاتورة بنجاح!');
 }
 
 function printInvoice(id){
@@ -395,40 +411,6 @@ function renderAll(){
 
  document.getElementById('cli-tb').innerHTML = db.clients.map(c=>`<tr><td>${c.name}<br><small style="color:var(--mut)">${c.nif}</small></td><td>${c.phone}</td><td style="color:var(--danger);font-weight:bold">${c.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--sec)" onclick="payClientDebt(${c.id})">تسديد</button></td></tr>`).join('');
  document.getElementById('sup-tb').innerHTML = db.suppliers.map(s=>`<tr><td>${s.name}</td><td>${s.phone}</td><td style="color:#3b82f6;font-weight:bold">${s.debt.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--pri);color:#000" onclick="paySupDebt(${s.id})">دفع</button></td></tr>`).join('') || '<tr><td colspan="4">لا يوجد موردين</td></tr>';
-// إصلاح دالة إدراج عناصر الفاتورة والحفظ لتجنب مشكلة "الفاتورة فارغة!"
-window.addItemToInvoice = function() {
-    let selectStock = document.getElementById('stockSelect'); // أو حقل المخزون لديك
-    let manualInput = document.getElementById('manualItemInput'); // حقل الكتابة اليدوية
-    let priceInput = document.getElementById('priceInput');
-    let qtyInput = document.getElementById('qtyInput');
-
-    let itemName = '';
-    if (selectStock && selectStock.value) {
-        itemName = selectStock.options[selectStock.selectedIndex].text;
-    } else if (manualInput) {
-        itemName = manualInput.value.trim();
-    }
-
-    let price = parseFloat(priceInput ? priceInput.value : 0) || 0;
-    let qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
-
-    if (!itemName || itemName.includes("اختر")) {
-        alert("يرجى اختيار سلعة أو كتابة بند صالح!");
-        return;
-    }
-
-    if (typeof invoiceItems === 'undefined') {
-        window.invoiceItems = [];
-    }
-
-    invoiceItems.push({ name: itemName, price: price, qty: qty, total: price * qty });
-    
-    if (typeof renderInvoiceTable === 'function') {
-        renderInvoiceTable();
-    } else if (typeof renderAll === 'function') {
-        renderAll();
-    }
-};
 }
 renderAll();
 </script>
