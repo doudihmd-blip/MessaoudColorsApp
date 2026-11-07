@@ -6,7 +6,7 @@
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--pri:#f59e0b;--sec:#10b981;--danger:#ef4444;--txt:#f8fafc;--mut:#94a3b8;--brd:#334155}
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0}
-body{background:var(--bg);color:var(--txt);padding-bottom:75px;font-size:14px}
+body{background:var(--bg);color:var(--txt);padding-bottom:80px;font-size:14px}
 header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:14px 16px;border-bottom:2px solid var(--pri);display:flex;justify-content:space-between;align-items:center}
 .brand h1{font-size:1.15rem;color:var(--pri)}
 .brand p{font-size:.75rem;color:var(--mut)}
@@ -30,10 +30,14 @@ th{color:var(--pri);background:#090d16}
 .nav{position:fixed;bottom:0;width:100%;background:#090d16;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid var(--brd);z-index:99}
 .nav button{background:none;color:var(--mut);margin:0;padding:4px;font-size:.75rem;display:flex;flex-direction:column;align-items:center;width:auto}
 .nav button.active{color:var(--pri);font-weight:bold}
+
+/* شاشة معاينة وطباعة الفاتورة */
+#printModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;color:#000;z-index:9999;overflow-y:auto;padding:15px}
+.no-print-bar{display:flex;gap:10px;margin-bottom:15px;background:#0f172a;padding:10px;border-radius:8px}
 @media print{
- body *{visibility:hidden}
- #printArea,#printArea *{visibility:visible}
- #printArea{position:absolute;left:0;top:0;width:100%;background:#fff;color:#000;padding:20px}
+ body{background:#fff;padding:0}
+ header,.tab,.nav,.no-print-bar{display:none !important}
+ #printModal{display:block !important;position:static;padding:0}
 }
 </style>
 </head>
@@ -56,12 +60,12 @@ th{color:var(--pri);background:#090d16}
   <div class="stat" style="border-color:#3b82f6"><h4>مستحقات الشركات (Fournisseurs)</h4><div id="st-sdebt">0 د.ج</div></div>
  </div>
  <div class="card">
-  <h3><span>تنبيهات المخزون المنخفض</span></h3>
-  <table><thead><tr><th>المنتج</th><th>الكمية المتبقية</th><th>سعر البيع</th></tr></thead><tbody id="low-stock-tb"></tbody></table>
+  <h3><span>آخر الفواتير والعروض المحفوظة</span></h3>
+  <table><thead><tr><th>الرقم/النوع</th><th>الزبون</th><th>المبلغ TTC</th><th>إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
  </div>
  <div class="card">
-  <h3><span>آخر الفواتير والعروض المصدرة</span></h3>
-  <table><thead><tr><th>النوع</th><th>الزبون/الشركة</th><th>المبلغ</th><th>إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
+  <h3><span>تنبيهات المخزون المنخفض</span></h3>
+  <table><thead><tr><th>المنتج</th><th>الكمية المتبقية</th><th>سعر البيع</th></tr></thead><tbody id="low-stock-tb"></tbody></table>
  </div>
 </div>
 
@@ -138,7 +142,7 @@ th{color:var(--pri);background:#090d16}
   </div>
   <div id="inv-totals" style="margin-top:10px;padding:10px;background:#090d16;border-radius:6px;line-height:1.7"></div>
   <div class="row-inp">
-   <button class="sec" onclick="saveAndPrintInv(true)">🖨️ حفظ وطباعة PDF</button>
+   <button class="sec" onclick="saveAndPrintInv(true)">🖨️ حفظ ومعاينة PDF</button>
    <button onclick="saveAndPrintInv(false)">💾 حفظ فقط</button>
   </div>
  </div>
@@ -180,8 +184,14 @@ th{color:var(--pri);background:#090d16}
  </div>
 </div>
 
-<!-- منطقة الطباعة الرسمية -->
-<div id="printArea" style="display:none"></div>
+<!-- نافذة معاينة وطباعة الفاتورة الرسمية -->
+<div id="printModal">
+ <div class="no-print-bar">
+  <button class="sec" style="margin:0" onclick="triggerAndroidPrint()">🖨️ حفظ كملف PDF / طباعة الآن</button>
+  <button style="margin:0;background:var(--danger);color:#fff" onclick="closePrintModal()">✖ إغلاق المعاينة</button>
+ </div>
+ <div id="invoicePaper"></div>
+</div>
 
 <div class="nav">
  <button class="active" onclick="nav('t-dash',this)">📊 الرئيسية</button>
@@ -199,6 +209,7 @@ let db = JSON.parse(localStorage.getItem('messaoudColorsERP')) || {
  invoices: []
 };
 let currItems = [];
+let currentPrintJobName = "Facture_Messaoud_Colors";
 
 function saveDB(){ localStorage.setItem('messaoudColorsERP', JSON.stringify(db)); renderAll(); }
 
@@ -219,6 +230,7 @@ function addProduct(){
  db.products.push({id:Date.now(), name, buy, sell, qty, min});
  document.getElementById('p-name').value=''; document.getElementById('p-buy').value=''; document.getElementById('p-sell').value=''; document.getElementById('p-qty').value='';
  saveDB();
+ alert('تمت إضافة السلعة للمخزون!');
 }
 
 function delProd(id){ db.products=db.products.filter(p=>p.id!==id); saveDB(); }
@@ -232,6 +244,7 @@ function addClient(){
  db.clients.push({id:Date.now(), name, phone, debt, nif});
  document.getElementById('c-name').value=''; document.getElementById('c-debt').value='0'; document.getElementById('c-nif').value='';
  saveDB();
+ alert('تم حفظ الزبون بنجاح!');
 }
 
 function payClientDebt(id){
@@ -298,7 +311,6 @@ function renderCurrInv(){
  let tvaRate = +document.getElementById('inv-tva').value;
  let tva = Math.round(ht * (tvaRate/100));
  let ttc = ht + tva;
- document.getElementById('inv-paid').value = document.getElementById('inv-paid').value || ttc;
  let paid = +document.getElementById('inv-paid').value||0;
  let rest = Math.max(0, ttc - paid);
  document.getElementById('inv-totals').innerHTML = `
@@ -317,7 +329,7 @@ function saveAndPrintInv(doPrint){
   addInvItem();
  }
 
- if(currItems.length === 0) return alert('الفاتورة فارغة! أضف اسم السلعة والسعر ثم اضغط إدراج في الوثيقة.');
+ if(currItems.length === 0) return alert('الفاتورة فارغة! أضف السلعة والسعر أولاً.');
  
  let type = document.getElementById('inv-type').value;
  let cid = +document.getElementById('inv-client').value;
@@ -349,42 +361,72 @@ function saveAndPrintInv(doPrint){
  currItems = [];
  renderCurrInv();
  saveDB();
- if(doPrint) printInvoice(inv.id);
- else alert('تم حفظ الفاتورة بنجاح!');
+ 
+ if(doPrint) {
+  showInvoicePreview(inv.id);
+ } else {
+  alert('تم حفظ الوثيقة بنجاح! يمكنك طباعتها في أي وقت من صفحة الرئيسية.');
+ }
 }
 
-function printInvoice(id){
+function showInvoicePreview(id){
  let inv = db.invoices.find(x=>x.id===id);
  if(!inv) return;
- let rows = inv.items.map((it,i)=>`<tr><td style="border:1px solid #000;padding:6px">${i+1}</td><td style="border:1px solid #000;padding:6px">${it.name}</td><td style="border:1px solid #000;padding:6px">${it.qty}</td><td style="border:1px solid #000;padding:6px">${it.price.toLocaleString()} د.ج</td><td style="border:1px solid #000;padding:6px">${it.total.toLocaleString()} د.ج</td></tr>`).join('');
- let pa = document.getElementById('printArea');
- pa.style.display = 'block';
- pa.innerHTML = `
-  <div style="border:2px solid #000;padding:15px;direction:rtl;font-family:sans-serif;color:#000;background:#fff">
-   <div style="display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:10px">
-    <div><h2 style="margin:0">MESSAOUD COLORS - ERP</h2><p>النظام التجاري المحترف</p></div>
-    <div style="text-align:left"><h3>${inv.type}</h3><p>رقم: ${inv.num}</p><p>التاريخ: ${inv.date}</p></div>
+ currentPrintJobName = inv.type.split('-')[0].trim() + "_" + inv.clientName;
+ let rows = inv.items.map((it,i)=>`<tr><td style="border:1px solid #000;padding:8px;text-align:center">${i+1}</td><td style="border:1px solid #000;padding:8px">${it.name}</td><td style="border:1px solid #000;padding:8px;text-align:center">${it.qty}</td><td style="border:1px solid #000;padding:8px">${it.price.toLocaleString()} د.ج</td><td style="border:1px solid #000;padding:8px;font-weight:bold">${it.total.toLocaleString()} د.ج</td></tr>`).join('');
+ 
+ document.getElementById('invoicePaper').innerHTML = `
+  <div style="border:2px solid #000;padding:18px;direction:rtl;font-family:sans-serif;color:#000;background:#fff">
+   <div style="display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:12px">
+    <div>
+     <h2 style="margin:0;color:#000">MESSAOUD COLORS</h2>
+     <p style="margin:4px 0;font-size:13px">تجارة الدهانات ومواد الديكور | مسعود العاتي</p>
+    </div>
+    <div style="text-align:left">
+     <h3 style="margin:0;background:#000;color:#fff;padding:4px 10px;display:inline-block">${inv.type}</h3>
+     <p style="margin:4px 0"><b>الرقم:</b> ${inv.num}</p>
+     <p style="margin:0"><b>التاريخ:</b> ${inv.date}</p>
+    </div>
    </div>
-   <div style="margin:12px 0;padding:8px;border:1px solid #000">
-    <strong>الزبون:</strong> ${inv.clientName} ${inv.clientNif ? ' | <strong>NIF:</strong> '+inv.clientNif : ''}
+   <div style="margin:14px 0;padding:10px;border:1px solid #000;background:#f8f9fa">
+    <strong>السيد / المؤسسة:</strong> ${inv.clientName} ${inv.clientNif ? '<br><strong>البيانات الجبائية (RC/NIF):</strong> '+inv.clientNif : ''}
    </div>
-   <table style="width:100%;border-collapse:collapse;margin:10px 0;color:#000">
-    <thead><tr style="background:#eee"><th style="border:1px solid #000;padding:6px">#</th><th style="border:1px solid #000;padding:6px">البيان (Désignation)</th><th style="border:1px solid #000;padding:6px">الكمية</th><th style="border:1px solid #000;padding:6px">سعر الوحدة</th><th style="border:1px solid #000;padding:6px">الإجمالي</th></tr></thead>
+   <table style="width:100%;border-collapse:collapse;margin:12px 0;color:#000">
+    <thead>
+     <tr style="background:#e2e8f0">
+      <th style="border:1px solid #000;padding:8px;color:#000">#</th>
+      <th style="border:1px solid #000;padding:8px;color:#000">البيان (Désignation)</th>
+      <th style="border:1px solid #000;padding:8px;color:#000">الكمية</th>
+      <th style="border:1px solid #000;padding:8px;color:#000">سعر الوحدة</th>
+      <th style="border:1px solid #000;padding:8px;color:#000">الإجمالي HT</th>
+     </tr>
+    </thead>
     <tbody>${rows}</tbody>
    </table>
-   <div style="width:260px;margin-right:auto;border:1px solid #000;padding:8px;line-height:1.6">
-    <div>المجموع HT: <b>${inv.ht.toLocaleString()} د.ج</b></div>
-    <div>الضريبة TVA (${inv.tvaRate}%): <b>${(inv.ttc-inv.ht).toLocaleString()} د.ج</b></div>
-    <div style="font-size:1.1rem;border-top:1px solid #000">المجموع TTC: <b>${inv.ttc.toLocaleString()} د.ج</b></div>
+   <div style="width:270px;margin-right:auto;border:2px solid #000;padding:10px;line-height:1.8;background:#f8f9fa">
+    <div style="display:flex;justify-content:space-between"><span>المجموع HT:</span><b>${inv.ht.toLocaleString()} د.ج</b></div>
+    <div style="display:flex;justify-content:space-between"><span>الضريبة TVA (${inv.tvaRate}%):</span><b>${(inv.ttc-inv.ht).toLocaleString()} د.ج</b></div>
+    <div style="display:flex;justify-content:space-between;font-size:1.1rem;border-top:1px solid #000;padding-top:4px"><span>المجموع TTC:</span><b>${inv.ttc.toLocaleString()} د.ج</b></div>
    </div>
-   <div style="margin-top:30px;display:flex;justify-content:space-between">
+   <div style="margin-top:35px;margin-bottom:15px;display:flex;justify-content:space-between;font-weight:bold">
     <div>إمضاء الزبون:</div>
-    <div>ختم وإمضاء المؤسسة:</div>
+    <div>الختم والإمضاء:</div>
    </div>
   </div>
  `;
- window.print();
- setTimeout(()=>{ pa.style.display='none'; }, 1000);
+ document.getElementById('printModal').style.display = 'block';
+}
+
+function triggerAndroidPrint(){
+ if(window.AndroidBridge && window.AndroidBridge.printPage){
+  window.AndroidBridge.printPage(currentPrintJobName);
+ } else {
+  window.print();
+ }
+}
+
+function closePrintModal(){
+ document.getElementById('printModal').style.display = 'none';
 }
 
 function renderAll(){
@@ -399,7 +441,7 @@ function renderAll(){
 
  document.getElementById('low-stock-tb').innerHTML = db.products.filter(p=>p.qty<=p.min).map(p=>`<tr><td>${p.name}</td><td style="color:var(--danger);font-weight:bold">${p.qty}</td><td>${p.sell.toLocaleString()} د.ج</td></tr>`).join('') || '<tr><td colspan="3">المخزون بحالة ممتازة</td></tr>';
 
- document.getElementById('recent-inv-tb').innerHTML = db.invoices.slice(0,10).map(i=>`<tr><td>${i.type.split('-')[0]}</td><td>${i.clientName}</td><td>${i.ttc.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--pri);color:#000" onclick="printInvoice(${i.id})">طباعة</button></td></tr>`).join('') || '<tr><td colspan="4">لا توجد فواتير بعد</td></tr>';
+ document.getElementById('recent-inv-tb').innerHTML = db.invoices.slice(0,15).map(i=>`<tr><td><b>${i.num}</b><br><small style="color:var(--mut)">${i.type.split('-')[0]}</small></td><td>${i.clientName}</td><td>${i.ttc.toLocaleString()} د.ج</td><td><button class="del" style="background:var(--sec);color:#fff;padding:6px 10px" onclick="showInvoicePreview(${i.id})">📄 عرض / PDF</button></td></tr>`).join('') || '<tr><td colspan="4">لا توجد فواتير بعد</td></tr>';
 
  let q = (document.getElementById('search-stock').value||'').toLowerCase();
  let flt = db.products.filter(p=>p.name.toLowerCase().includes(q));
