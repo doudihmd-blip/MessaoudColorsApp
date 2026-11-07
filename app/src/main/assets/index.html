@@ -2,13 +2,13 @@
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Messaoud Colors ERP</title>
+<title>Messaoud Gestion Pro</title>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--pri:#f59e0b;--sec:#10b981;--danger:#ef4444;--blue:#3b82f6;--txt:#f8fafc;--mut:#94a3b8;--brd:#334155}
 *{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);padding-bottom:80px;font-size:14px}
 header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:12px 14px;border-bottom:2px solid var(--pri);display:flex;justify-content:space-between;align-items:center}
-.brand h1{font-size:1.1rem;color:var(--pri)}
+.brand h1{font-size:1.05rem;color:var(--pri);letter-spacing:0.5px}
 .brand p{font-size:.72rem;color:var(--mut)}
 .lang-btn{background:var(--pri);color:#000;border:none;padding:6px 12px;border-radius:6px;font-weight:bold;font-size:.8rem;width:auto;margin:0;cursor:pointer}
 .tab{display:none;padding:12px}.tab.active{display:block}
@@ -51,19 +51,19 @@ th{color:var(--pri);background:#090d16}
 
 <header>
  <div class="brand">
-  <h1>MESSAOUD COLORS - ERP</h1>
-  <p data-i18n="sub">النظام التجاري المتكامل للتسيير والفوترة</p>
+  <h1>MESSAOUD GESTION PRO</h1>
+  <p data-i18n="sub">نظام التسيير التجاري، المخزون والفوترة</p>
  </div>
- <button class="lang-btn" onclick="toggleLang()" id="langBtn">Français 🇫🇷</button>
+ <button type="button" class="lang-btn" onclick="toggleLang()" id="langBtn">Français 🇫🇷</button>
 </header>
 
 <!-- 1. لوحة القيادة -->
 <div id="t-dash" class="tab active">
  <div class="grid2">
-  <div class="stat"><h4 data-i18n="totSales">إجمالي المبيعات</h4><div id="st-sales">0</div></div>
-  <div class="stat" style="border-color:var(--sec)"><h4 data-i18n="stockVal">قيمة المخزون</h4><div id="st-stock">0</div></div>
-  <div class="stat" style="border-color:var(--danger)"><h4 data-i18n="cliDebt">ديون الزبائن (Crédit)</h4><div id="st-cdebt">0</div></div>
-  <div class="stat" style="border-color:var(--blue)"><h4 data-i18n="supDebt">مستحقات الموردين</h4><div id="st-sdebt">0</div></div>
+  <div class="stat"><h4 data-i18n="totSales">إجمالي المبيعات</h4><div id="st-sales">0 د.ج</div></div>
+  <div class="stat" style="border-color:var(--sec)"><h4 data-i18n="stockVal">قيمة المخزون</h4><div id="st-stock">0 د.ج</div></div>
+  <div class="stat" style="border-color:var(--danger)"><h4 data-i18n="cliDebt">ديون الزبائن (Crédit)</h4><div id="st-cdebt">0 د.ج</div></div>
+  <div class="stat" style="border-color:var(--blue)"><h4 data-i18n="supDebt">مستحقات الموردين</h4><div id="st-sdebt">0 د.ج</div></div>
  </div>
  <div class="card">
   <h3><span data-i18n="recentInv">آخر الفواتير والوثائق المحفوظة</span></h3>
@@ -79,7 +79,7 @@ th{color:var(--pri);background:#090d16}
 <div id="t-stock" class="tab">
  <div class="card">
   <h3 data-i18n="addProdTitle">إضافة منتج جديد للمخزون</h3>
-  <label data-i18n="lblProdName">اسم السلعة / المادة:</label>
+  <label data-i18n="lblProdName">اسم السلعة / المنتج:</label>
   <input id="p-name" placeholder="...">
   <div class="row-inp">
    <div><label data-i18n="lblBuy">سعر الشراء:</label><input type="number" id="p-buy" placeholder="0"></div>
@@ -89,7 +89,7 @@ th{color:var(--pri);background:#090d16}
    <div><label data-i18n="lblQty">الكمية المتوفرة:</label><input type="number" id="p-qty" placeholder="0"></div>
    <div><label data-i18n="lblMin">حد التنبيه:</label><input type="number" id="p-min" value="5"></div>
   </div>
-  <button onclick="addProduct()" data-i18n="btnAddStock">+ إضافة للمخزون</button>
+  <button type="button" onclick="addProduct()" data-i18n="btnAddStock">+ إضافة للمخزون</button>
  </div>
  <div class="card">
   <h3><span data-i18n="stockList">جرد المخزون</span> (<span id="stock-count">0</span>)</h3>
@@ -117,7 +117,6 @@ th{color:var(--pri);background:#090d16}
    </div>
   </div>
 
-  <!-- مربع إدخال السلعة والسعر بوضوح -->
   <div class="sub-box">
    <div class="row-inp">
     <div>
@@ -126,14 +125,14 @@ th{color:var(--pri);background:#090d16}
     </div>
     <div>
      <label data-i18n="lblCustomItem">أو اكتب اسم السلعة يدوياً:</label>
-     <input id="inv-custom" placeholder="مثال: دهان / معجون...">
+     <input id="inv-custom" placeholder="...">
     </div>
    </div>
    <div class="row-inp">
-    <div><label data-i18n="thQty">الكمية (Quantité):</label><input type="number" id="inv-qty" value="1"></div>
-    <div><label style="color:var(--pri);font-weight:bold" data-i18n="lblUnitPrice">سعر الوحدة (Prix Unitaire):</label><input type="number" id="inv-price" placeholder="أدخل السعر هنا (أو 0 للبون)" style="border-color:var(--pri)"></div>
+    <div><label data-i18n="thQty">الكمية (Qté):</label><input type="number" id="inv-qty" value="1"></div>
+    <div><label style="color:var(--pri);font-weight:bold" data-i18n="lblUnitPrice">سعر الوحدة (Prix):</label><input type="number" id="inv-price" placeholder="0" style="border-color:var(--pri)"></div>
    </div>
-   <button onclick="addInvItem()" data-i18n="btnInsert">+ إدراج السلعة في الجدول</button>
+   <button type="button" onclick="addInvItem()" data-i18n="btnInsert">+ إدراج السلعة في الجدول</button>
   </div>
 
   <table style="margin-top:12px"><thead><tr><th data-i18n="thDes">البيان</th><th data-i18n="thQty">الكمية</th><th data-i18n="thPrice">السعر</th><th data-i18n="thTot">الإجمالي</th><th></th></tr></thead><tbody id="curr-inv-tb"></tbody></table>
@@ -152,8 +151,8 @@ th{color:var(--pri);background:#090d16}
   </div>
   <div id="inv-totals" style="margin-top:10px;padding:10px;background:#090d16;border-radius:6px;line-height:1.7"></div>
   <div class="row-inp">
-   <button class="sec" onclick="saveAndPrintInv(true)" data-i18n="btnSavePrint">🖨️ حفظ ومعاينة / مشاركة</button>
-   <button onclick="saveAndPrintInv(false)" data-i18n="btnSaveOnly">💾 حفظ فقط</button>
+   <button type="button" class="sec" onclick="saveAndPrintInv(true)" data-i18n="btnSavePrint">🖨️ حفظ ومعاينة / مشاركة</button>
+   <button type="button" onclick="saveAndPrintInv(false)" data-i18n="btnSaveOnly">💾 حفظ فقط</button>
   </div>
  </div>
 </div>
@@ -169,7 +168,7 @@ th{color:var(--pri);background:#090d16}
   </div>
   <label>RC / NIF / AI:</label>
   <input id="c-nif" placeholder="RC / NIF / AI">
-  <button onclick="addClient()" data-i18n="btnAddCli">+ حفظ الزبون</button>
+  <button type="button" onclick="addClient()" data-i18n="btnAddCli">+ حفظ الزبون</button>
  </div>
  <div class="card">
   <h3 data-i18n="cliList">قائمة الزبائن والديون</h3>
@@ -180,13 +179,13 @@ th{color:var(--pri);background:#090d16}
 <!-- 5. الموردين والشركات -->
 <div id="t-sup" class="tab">
  <div class="card">
-  <h3 data-i18n="addSupTitle">إضافة مورد أو مصنع (Fournisseur)</h3>
+  <h3 data-i18n="addSupTitle">إضافة مورد أو شركة (Fournisseur)</h3>
   <input id="s-name" placeholder="Nom du fournisseur / اسم المورد">
   <div class="row-inp">
    <div><label data-i18n="lblPhone">الهاتف:</label><input id="s-phone" placeholder="0550..."></div>
    <div><label data-i18n="supDebt">مستحقاتهم:</label><input type="number" id="s-debt" value="0"></div>
   </div>
-  <button onclick="addSupplier()" data-i18n="btnAddSup">+ حفظ المورد</button>
+  <button type="button" onclick="addSupplier()" data-i18n="btnAddSup">+ حفظ المورد</button>
  </div>
  <div class="card">
   <h3 data-i18n="supList">دفتر الموردين والشركات</h3>
@@ -197,44 +196,44 @@ th{color:var(--pri);background:#090d16}
 <!-- نافذة معاينة وطباعة ومشاركة الفاتورة الرسمية -->
 <div id="printModal">
  <div class="no-print-bar">
-  <button class="sec" onclick="triggerAndroidPrint()">🖨️ PDF / Print</button>
-  <button class="share" onclick="shareCurrentInvoice()">📲 WhatsApp / Messenger</button>
-  <button style="grid-column:span 2;background:var(--danger);color:#fff" onclick="closePrintModal()">✖ إغلاق المعاينة / Fermer</button>
+  <button type="button" class="sec" onclick="triggerAndroidPrint()">🖨️ PDF / Print</button>
+  <button type="button" class="share" onclick="shareCurrentInvoice()">📲 WhatsApp / Messenger</button>
+  <button type="button" style="grid-column:span 2;background:var(--danger);color:#fff" onclick="closePrintModal()">✖ إغلاق المعاينة / Fermer</button>
  </div>
  <div id="invoicePaper"></div>
 </div>
 
 <div class="nav">
- <button class="active" onclick="nav('t-dash',this)">📊 <span data-i18n="navDash">الرئيسية</span></button>
- <button onclick="nav('t-stock',this)">📦 <span data-i18n="navStock">المخزون</span></button>
- <button onclick="nav('t-inv',this)">🧾 <span data-i18n="navInv">الفواتير</span></button>
- <button onclick="nav('t-cli',this)">👥 <span data-i18n="navCli">الزبائن</span></button>
- <button onclick="nav('t-sup',this)">🚛 <span data-i18n="navSup">الموردين</span></button>
+ <button type="button" class="active" onclick="nav('t-dash',this)">📊 <span data-i18n="navDash">الرئيسية</span></button>
+ <button type="button" onclick="nav('t-stock',this)">📦 <span data-i18n="navStock">المخزون</span></button>
+ <button type="button" onclick="nav('t-inv',this)">🧾 <span data-i18n="navInv">الفواتير</span></button>
+ <button type="button" onclick="nav('t-cli',this)">👥 <span data-i18n="navCli">الزبائن</span></button>
+ <button type="button" onclick="nav('t-sup',this)">🚛 <span data-i18n="navSup">الموردين</span></button>
 </div>
 
 <script>
 const dict = {
  ar: {
-  sub: "النظام التجاري المتكامل للتسيير والفوترة",
+  sub: "نظام التسيير التجاري، المخزون والفوترة",
   totSales: "إجمالي المبيعات", stockVal: "قيمة المخزون", cliDebt: "ديون الزبائن (Crédit)", supDebt: "مستحقات الموردين",
   recentInv: "آخر الفواتير والوثائق المحفوظة", lowStock: "تنبيهات المخزون المنخفض",
   thDoc: "الوثيقة", thCli: "الزبون", thAmt: "المبلغ TTC", thAct: "إجراء", thProd: "السلعة", thQty: "الكمية", thPrice: "السعر", thDes: "البيان (Désignation)", thTot: "الإجمالي", thSup: "المورد",
-  addProdTitle: "إضافة منتج جديد للمخزون", lblProdName: "اسم السلعة / المادة:", lblBuy: "سعر الشراء:", lblSell: "سعر البيع:", lblQty: "الكمية المتوفرة:", lblMin: "حد التنبيه:", btnAddStock: "+ إضافة للمخزون", stockList: "جرد المخزون",
+  addProdTitle: "إضافة منتج جديد للمخزون", lblProdName: "اسم السلعة / المنتج:", lblBuy: "سعر الشراء:", lblSell: "سعر البيع:", lblQty: "الكمية المتوفرة:", lblMin: "حد التنبيه:", btnAddStock: "+ إضافة للمخزون", stockList: "جرد المخزون",
   newDocTitle: "إصدار وثيقة (Proforma / Facture / BL)", lblDocType: "نوع الوثيقة:", lblSelectCli: "الزبون / الشركة:", lblFromStock: "اختر سلعة من المخزون:", lblCustomItem: "أو اكتب اسم السلعة يدوياً:", lblUnitPrice: "سعر الوحدة (Prix):", btnInsert: "+ إدراج السلعة في الجدول", lblPaid: "العربون / المدفوع (Versement):", btnSavePrint: "🖨️ حفظ ومعاينة / مشاركة", btnSaveOnly: "💾 حفظ فقط",
   addCliTitle: "إضافة زبون / مؤسسة", lblPhone: "رقم الهاتف:", lblPrevDebt: "الدين السابق:", btnAddCli: "+ حفظ الزبون", cliList: "قائمة الزبائن والديون",
-  addSupTitle: "إضافة مورد أو مصنع", btnAddSup: "+ حفظ المورد", supList: "دفتر الموردين والشركات",
+  addSupTitle: "إضافة مورد أو شركة", btnAddSup: "+ حفظ المورد", supList: "دفتر الموردين والشركات",
   navDash: "الرئيسية", navStock: "المخزون", navInv: "الفواتير", navCli: "الزبائن", navSup: "الموردين",
   curr: "د.ج", chooseStock: "-- اختر من المخزون --", payBtn: "تسديد", viewBtn: "📄 عرض / مشاركة",
   docTitles: { "PROFORMA": "فاتورة شكلية - FACTURE PROFORMA", "FACTURE": "فاتورة نهائية - FACTURE", "BON DE LIVRAISON": "وصل تسليم - BON DE LIVRAISON" },
   invClientLbl: "السيد / المؤسسة:", invDateLbl: "التاريخ:", invNumLbl: "الرقم:", signCli: "استلام الزبون:", signComp: "الختم والإمضاء:"
  },
  fr: {
-  sub: "Système ERP Commercial & Facturation Pro",
-  totSales: "Chiffre d'Affaires", stockVal: "Valeur du Stock", cliDebt: "Crédits Clients", supDebt: "Dettes Fournisseurs",
+  sub: "Système de Gestion Commerciale, Stock & Facturation",
+  totSales: "Chiffre d Affaires", stockVal: "Valeur du Stock", cliDebt: "Crédits Clients", supDebt: "Dettes Fournisseurs",
   recentInv: "Derniers Documents Enregistrés", lowStock: "Alertes Stock Faible",
   thDoc: "Document", thCli: "Client", thAmt: "Total TTC", thAct: "Action", thProd: "Article", thQty: "Qté", thPrice: "P.U", thDes: "Désignation", thTot: "Total HT", thSup: "Fournisseur",
-  addProdTitle: "Ajouter un Article au Stock", lblProdName: "Désignation de l'article:", lblBuy: "Prix d'Achat:", lblSell: "Prix de Vente:", lblQty: "Quantité:", lblMin: "Seuil d'alerte:", btnAddStock: "+ Ajouter au Stock", stockList: "Inventaire du Stock",
-  newDocTitle: "Établir (Proforma / Facture / BL)", lblDocType: "Type de Document:", lblSelectCli: "Client / Société:", lblFromStock: "Choisir du Stock:", lblCustomItem: "Ou saisir article manuellement:", lblUnitPrice: "Prix Unitaire:", btnInsert: "+ Insérer l'article au tableau", lblPaid: "Versement payé:", btnSavePrint: "🖨️ Valider, Aperçu & Partager", btnSaveOnly: "💾 Enregistrer",
+  addProdTitle: "Ajouter un Article au Stock", lblProdName: "Désignation de l article:", lblBuy: "Prix d Achat:", lblSell: "Prix de Vente:", lblQty: "Quantité:", lblMin: "Seuil d alerte:", btnAddStock: "+ Ajouter au Stock", stockList: "Inventaire du Stock",
+  newDocTitle: "Établir (Proforma / Facture / BL)", lblDocType: "Type de Document:", lblSelectCli: "Client / Société:", lblFromStock: "Choisir du Stock:", lblCustomItem: "Ou saisir article manuellement:", lblUnitPrice: "Prix Unitaire:", btnInsert: "+ Insérer l article au tableau", lblPaid: "Versement payé:", btnSavePrint: "🖨️ Valider, Aperçu & Partager", btnSaveOnly: "💾 Enregistrer",
   addCliTitle: "Ajouter un Client / Entreprise", lblPhone: "Téléphone:", lblPrevDebt: "Ancien Crédit:", btnAddCli: "+ Enregistrer Client", cliList: "Liste des Clients & Crédits",
   addSupTitle: "Ajouter un Fournisseur", btnAddSup: "+ Enregistrer Fournisseur", supList: "Liste des Fournisseurs",
   navDash: "Accueil", navStock: "Stock", navInv: "Factures", navCli: "Clients", navSup: "Fournisseurs",
@@ -244,74 +243,76 @@ const dict = {
  }
 };
 
-let lang = localStorage.getItem('erpLang') || 'ar';
-let db = JSON.parse(localStorage.getItem('messaoudColorsERP')) || {
+let lang = localStorage.getItem("erpLang") || "ar";
+let db = JSON.parse(localStorage.getItem("messaoudColorsERP")) || {
  products: [],
- clients: [{id:1, name:'Client Comptoir / زبون نقدي', phone:'-', debt:0, nif:''}],
+ clients: [{id:1, name:"Client Comptoir / زبون نقدي", phone:"-", debt:0, nif:""}],
  suppliers: [],
  invoices: []
 };
 let currItems = [];
 let activeInvoice = null;
-let currentPrintJobName = "Document_Messaoud_Colors";
+let currentPrintJobName = "Document_Messaoud_Gestion";
 
 function t(k){ return dict[lang][k] || k; }
 
 function toggleLang(){
- lang = (lang === 'ar') ? 'fr' : 'ar';
- localStorage.setItem('erpLang', lang);
+ lang = (lang === "ar") ? "fr" : "ar";
+ localStorage.setItem("erpLang", lang);
  applyLang();
 }
 
 function applyLang(){
- let root = document.getElementById('htmlRoot');
+ let root = document.getElementById("htmlRoot");
  root.lang = lang;
- root.dir = (lang === 'ar') ? 'rtl' : 'ltr';
- document.getElementById('langBtn').innerText = (lang === 'ar') ? 'Français 🇫🇷' : 'العربية 🇩🇿';
- document.querySelectorAll('[data-i18n]').forEach(el=>{
-  let key = el.getAttribute('data-i18n');
+ root.dir = (lang === "ar") ? "rtl" : "ltr";
+ document.getElementById("langBtn").innerText = (lang === "ar") ? "Français 🇫🇷" : "العربية 🇩🇿";
+ document.querySelectorAll("[data-i18n]").forEach(el=>{
+  let key = el.getAttribute("data-i18n");
   if(dict[lang][key]) el.innerText = dict[lang][key];
  });
  renderCurrInv();
  renderAll();
 }
 
-function saveDB(){ localStorage.setItem('messaoudColorsERP', JSON.stringify(db)); renderAll(); }
+function saveDB(){ localStorage.setItem("messaoudColorsERP", JSON.stringify(db)); renderAll(); }
 
 function nav(id, btn){
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
- document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- btn.classList.add('active');
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ btn.classList.add("active");
 }
 
 function addProduct(){
- let name=document.getElementById('p-name').value.trim();
- let buy=+document.getElementById('p-buy').value||0;
- let sell=+document.getElementById('p-sell').value||0;
- let qty=+document.getElementById('p-qty').value||0;
- let min=+document.getElementById('p-min').value||5;
- if(!name) return alert(lang==='ar'?'أدخل اسم السلعة':'Veuillez saisir le nom de l'article');
+ let name=document.getElementById("p-name").value.trim();
+ let buy=+document.getElementById("p-buy").value||0;
+ let sell=+document.getElementById("p-sell").value||0;
+ let qty=+document.getElementById("p-qty").value||0;
+ let min=+document.getElementById("p-min").value||5;
+ if(!name) return alert(lang==="ar"?"الرجاء إدخال اسم السلعة":"Veuillez saisir la désignation");
  db.products.push({id:Date.now(), name, buy, sell, qty, min});
- document.getElementById('p-name').value=''; document.getElementById('p-buy').value=''; document.getElementById('p-sell').value=''; document.getElementById('p-qty').value='';
+ document.getElementById("p-name").value=""; document.getElementById("p-buy").value=""; document.getElementById("p-sell").value=""; document.getElementById("p-qty").value="";
  saveDB();
+ alert(lang==="ar"?"تمت إضافة السلعة للمخزون بنجاح":"Article ajouté au stock");
 }
 
 function delProd(id){ db.products=db.products.filter(p=>p.id!==id); saveDB(); }
 
 function addClient(){
- let name=document.getElementById('c-name').value.trim();
- let phone=document.getElementById('c-phone').value.trim()||'-';
- let debt=+document.getElementById('c-debt').value||0;
- let nif=document.getElementById('c-nif').value.trim()||'';
- if(!name) return;
+ let name=document.getElementById("c-name").value.trim();
+ let phone=document.getElementById("c-phone").value.trim()||"-";
+ let debt=+document.getElementById("c-debt").value||0;
+ let nif=document.getElementById("c-nif").value.trim()||"";
+ if(!name) return alert(lang==="ar"?"أدخل اسم الزبون":"Veuillez saisir le nom du client");
  db.clients.push({id:Date.now(), name, phone, debt, nif});
- document.getElementById('c-name').value=''; document.getElementById('c-debt').value='0'; document.getElementById('c-nif').value='';
+ document.getElementById("c-name").value=""; document.getElementById("c-debt").value="0"; document.getElementById("c-nif").value="";
  saveDB();
+ alert(lang==="ar"?"تم حفظ الزبون بنجاح":"Client enregistré");
 }
 
 function payClientDebt(id){
- let amt = prompt(lang==='ar'?'المبلغ المسدد (د.ج):':'Montant versé (DA):');
+ let amt = prompt(lang==="ar"?"المبلغ المسدد (د.ج):":"Montant versé (DA):");
  if(amt && +amt>0){
   let c = db.clients.find(x=>x.id===id);
   if(c){ c.debt = Math.max(0, c.debt - (+amt)); saveDB(); }
@@ -319,17 +320,18 @@ function payClientDebt(id){
 }
 
 function addSupplier(){
- let name=document.getElementById('s-name').value.trim();
- let phone=document.getElementById('s-phone').value.trim()||'-';
- let debt=+document.getElementById('s-debt').value||0;
- if(!name) return;
+ let name=document.getElementById("s-name").value.trim();
+ let phone=document.getElementById("s-phone").value.trim()||"-";
+ let debt=+document.getElementById("s-debt").value||0;
+ if(!name) return alert(lang==="ar"?"أدخل اسم المورد":"Veuillez saisir le nom du fournisseur");
  db.suppliers.push({id:Date.now(), name, phone, debt});
- document.getElementById('s-name').value=''; document.getElementById('s-debt').value='0';
+ document.getElementById("s-name").value=""; document.getElementById("s-debt").value="0";
  saveDB();
+ alert(lang==="ar"?"تم حفظ المورد بنجاح":"Fournisseur enregistré");
 }
 
 function paySupDebt(id){
- let amt = prompt(lang==='ar'?'المبلغ المدفوع للمورد:':'Montant payé au fournisseur:');
+ let amt = prompt(lang==="ar"?"المبلغ المدفوع للمورد:":"Montant payé au fournisseur:");
  if(amt && +amt>0){
   let s = db.suppliers.find(x=>x.id===id);
   if(s){ s.debt = Math.max(0, s.debt - (+amt)); saveDB(); }
@@ -337,115 +339,111 @@ function paySupDebt(id){
 }
 
 function fillProdPrice(){
- let pid = +document.getElementById('inv-prod').value;
+ let pid = +document.getElementById("inv-prod").value;
  let p = db.products.find(x=>x.id===pid);
  if(p){
-  document.getElementById('inv-price').value = p.sell;
-  document.getElementById('inv-custom').value = p.name;
+  document.getElementById("inv-price").value = p.sell;
+  document.getElementById("inv-custom").value = p.name;
  }
 }
 
-// دالة إدراج ذكية تقبل أي سلعة حتى لو كان السعر 0 (مهم جداً للبون Bon de Livraison)
 function addInvItem(){
- let docType = document.getElementById('inv-type').value;
- let custom = document.getElementById('inv-custom').value.trim();
- let pid = +document.getElementById('inv-prod').value;
+ let custom = document.getElementById("inv-custom").value.trim();
+ let pid = +document.getElementById("inv-prod").value;
  let p = db.products.find(x=>x.id===pid);
- let qty = +document.getElementById('inv-qty').value||1;
- let price = +document.getElementById('inv-price').value||0;
- let paidVal = +document.getElementById('inv-paid').value||0;
+ let qty = +document.getElementById("inv-qty").value||1;
+ let price = +document.getElementById("inv-price").value||0;
+ let paidVal = +document.getElementById("inv-paid").value||0;
 
- // إذا وضع المستخدم السعر بالخطأ في خانة Versement بينما السعر 0، نلتقطه تلقائياً!
  if(price === 0 && paidVal > 0 && currItems.length === 0){
   price = paidVal;
  }
 
- let name = custom ? custom : (p ? p.name : '');
+ let name = custom ? custom : (p ? p.name : "");
  if(!name){
-  name = (lang === 'ar') ? 'سلعة / بضاعة' : 'Marchandise / Article';
+  name = (lang === "ar") ? "سلعة / بضاعة" : "Marchandise / Article";
  }
 
  currItems.push({pid: p?p.id:null, name, qty, price, total: qty*price});
- document.getElementById('inv-custom').value='';
- document.getElementById('inv-prod').value='';
- document.getElementById('inv-price').value='';
- document.getElementById('inv-qty').value='1';
+ document.getElementById("inv-custom").value="";
+ document.getElementById("inv-prod").value="";
+ document.getElementById("inv-price").value="";
+ document.getElementById("inv-qty").value="1";
  renderCurrInv();
 }
 
 function renderCurrInv(){
- let tb = document.getElementById('curr-inv-tb');
- let ht = 0, html = '';
+ let tb = document.getElementById("curr-inv-tb");
+ let ht = 0, html = "";
  currItems.forEach((it, idx)=>{
   ht += it.total;
-  html += `<tr><td><b>${it.name}</b></td><td>${it.qty}</td><td>${it.price.toLocaleString()}</td><td>${it.total.toLocaleString()}</td><td><button class="del" onclick="currItems.splice(${idx},1);renderCurrInv()">X</button></td></tr>`;
+  html += `<tr><td><b>${it.name}</b></td><td>${it.qty}</td><td>${it.price.toLocaleString()}</td><td>${it.total.toLocaleString()}</td><td><button type="button" class="del" onclick="currItems.splice(${idx},1);renderCurrInv()">X</button></td></tr>`;
  });
- tb.innerHTML = html || `<tr><td colspan="5" style="text-align:center;color:var(--mut)">${lang==='ar'?'لم يتم إدراج سلع في الجدول بعد':'Aucun article inséré'}</td></tr>`;
- let tvaRate = +document.getElementById('inv-tva').value;
+ tb.innerHTML = html || `<tr><td colspan="5" style="text-align:center;color:var(--mut)">${lang==="ar"?"لم يتم إدراج سلع في الجدول بعد":"Aucun article inséré"}</td></tr>`;
+ let tvaRate = +document.getElementById("inv-tva").value;
  let tva = Math.round(ht * (tvaRate/100));
  let ttc = ht + tva;
- let paid = +document.getElementById('inv-paid').value||0;
+ let paid = +document.getElementById("inv-paid").value||0;
  let rest = Math.max(0, ttc - paid);
- document.getElementById('inv-totals').innerHTML = `
-  <div>Total HT: <b>${ht.toLocaleString()} ${t('curr')}</b></div>
-  <div>TVA (${tvaRate}%): <b>${tva.toLocaleString()} ${t('curr')}</b></div>
-  <div style="color:var(--pri);font-size:1.05rem">Total TTC: <b>${ttc.toLocaleString()} ${t('curr')}</b></div>
-  <div style="color:var(--danger)">Reste / الباقي: <b>${rest.toLocaleString()} ${t('curr')}</b></div>
+ document.getElementById("inv-totals").innerHTML = `
+  <div>Total HT: <b>${ht.toLocaleString()} ${t("curr")}</b></div>
+  <div>TVA (${tvaRate}%): <b>${tva.toLocaleString()} ${t("curr")}</b></div>
+  <div style="color:var(--pri);font-size:1.05rem">Total TTC: <b>${ttc.toLocaleString()} ${t("curr")}</b></div>
+  <div style="color:var(--danger)">Reste / الباقي: <b>${rest.toLocaleString()} ${t("curr")}</b></div>
  `;
 }
 
 function saveAndPrintInv(doPrint){
- // إذا لم يضغط المستخدم على زر الإدراج، نقوم بإدراج البيانات الموجودة في الخانات تلقائياً!
  if(currItems.length === 0){
-  let custom = document.getElementById('inv-custom').value.trim();
-  let pid = +document.getElementById('inv-prod').value;
-  let price = +document.getElementById('inv-price').value||0;
-  let paid = +document.getElementById('inv-paid').value||0;
-  let type = document.getElementById('inv-type').value;
+  let custom = document.getElementById("inv-custom").value.trim();
+  let pid = +document.getElementById("inv-prod").value;
+  let price = +document.getElementById("inv-price").value||0;
+  let paid = +document.getElementById("inv-paid").value||0;
+  let type = document.getElementById("inv-type").value;
 
-  if(custom || pid || price > 0 || paid > 0 || type === 'BON DE LIVRAISON'){
+  if(custom || pid || price > 0 || paid > 0 || type === "BON DE LIVRAISON"){
    addInvItem();
   }
  }
 
  if(currItems.length === 0){
-  return alert(lang==='ar'?'الرجاء كتابة اسم السلعة أو السعر أولاً!':'Veuillez saisir un article ou un montant !');
+  return alert(lang==="ar"?"الرجاء كتابة اسم السلعة أو السعر أولاً!":"Veuillez saisir un article ou un montant !");
  }
  
- let type = document.getElementById('inv-type').value;
- let cid = +document.getElementById('inv-client').value;
+ let type = document.getElementById("inv-type").value;
+ let cid = +document.getElementById("inv-client").value;
  let client = db.clients.find(x=>x.id===cid) || db.clients[0];
  let ht = currItems.reduce((a,b)=>a+b.total, 0);
- let tvaRate = +document.getElementById('inv-tva').value;
+ let tvaRate = +document.getElementById("inv-tva").value;
  let ttc = ht + Math.round(ht*(tvaRate/100));
- let paid = +document.getElementById('inv-paid').value||0;
+ let paid = +document.getElementById("inv-paid").value||0;
  let rest = Math.max(0, ttc - paid);
 
- if(type !== 'PROFORMA'){
+ if(type !== "PROFORMA"){
   currItems.forEach(it=>{
    if(it.pid){
     let pr = db.products.find(x=>x.id===it.pid);
     if(pr) pr.qty = Math.max(0, pr.qty - it.qty);
    }
   });
-  if(rest > 0 && type === 'FACTURE') client.debt += rest;
+  if(rest > 0 && type === "FACTURE") client.debt += rest;
  }
 
  let inv = {
   id: Date.now(),
-  num: 'N° ' + (db.invoices.length + 1) + '/2026',
-  date: new Date().toLocaleDateString('fr-FR'),
+  num: "N° " + (db.invoices.length + 1) + "/2026",
+  date: new Date().toLocaleDateString("fr-FR"),
   type, clientName: client.name, clientNif: client.nif,
   items: [...currItems], ht, tvaRate, ttc, paid, rest
  };
  db.invoices.unshift(inv);
  currItems = [];
- document.getElementById('inv-paid').value = '0';
+ document.getElementById("inv-paid").value = "0";
  renderCurrInv();
  saveDB();
  
  if(doPrint) showInvoicePreview(inv.id);
- else alert(lang==='ar'?'تم حفظ الوثيقة بنجاح!':'Document enregistré avec succès!');
+ else alert(lang==="ar"?"تم حفظ الوثيقة بنجاح!":"Document enregistré avec succès!");
 }
 
 function showInvoicePreview(id){
@@ -455,90 +453,79 @@ function showInvoicePreview(id){
  let docTitle = dict[lang].docTitles[inv.type] || inv.type;
  currentPrintJobName = inv.type + "_" + inv.clientName;
  
- let isBLSansPrix = (inv.type === 'BON DE LIVRAISON' && inv.ttc === 0);
+ let isBLSansPrix = (inv.type === "BON DE LIVRAISON" && inv.ttc === 0);
 
  let rows = inv.items.map((it,i)=>`
   <tr>
    <td style="padding:8px;text-align:center">${i+1}</td>
    <td style="padding:8px;font-weight:bold">${it.name}</td>
    <td style="padding:8px;text-align:center;font-weight:bold">${it.qty}</td>
-   ${isBLSansPrix ? '' : `<td style="padding:8px">${it.price.toLocaleString()} ${t('curr')}</td><td style="padding:8px;font-weight:bold">${it.total.toLocaleString()} ${t('curr')}</td>`}
-  </tr>`).join('');
+   ${isBLSansPrix ? "" : `<td style="padding:8px">${it.price.toLocaleString()} ${t("curr")}</td><td style="padding:8px;font-weight:bold">${it.total.toLocaleString()} ${t("curr")}</td>`}
+  </tr>`).join("");
  
- document.getElementById('invoicePaper').innerHTML = `
-  <div style="border:2px solid #000;padding:18px;direction:${lang==='ar'?'rtl':'ltr'};font-family:sans-serif;color:#000;background:#fff">
+ document.getElementById("invoicePaper").innerHTML = `
+  <div style="border:2px solid #000;padding:18px;direction:${lang==="ar"?"rtl":"ltr"};font-family:sans-serif;color:#000;background:#fff">
    <div style="display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:12px">
     <div>
-     <h2 style="margin:0;color:#000;font-size:1.3rem">MESSAOUD COLORS</h2>
-     <p style="margin:4px 0;font-size:12px;color:#333">${t('sub')}</p>
+     <h2 style="margin:0;color:#000;font-size:1.3rem">MESSAOUD GESTION PRO</h2>
+     <p style="margin:4px 0;font-size:12px;color:#333">${t("sub")}</p>
     </div>
-    <div style="text-align:${lang==='ar'?'left':'right'}">
+    <div style="text-align:${lang==="ar"?"left":"right"}">
      <div style="background:#e2e8f0;color:#000;border:2px solid #000;padding:5px 12px;font-weight:bold;font-size:1rem;display:inline-block">${docTitle}</div>
-     <p style="margin:4px 0"><b>${t('invNumLbl')}</b> ${inv.num}</p>
-     <p style="margin:0"><b>${t('invDateLbl')}</b> ${inv.date}</p>
+     <p style="margin:4px 0"><b>${t("invNumLbl")}</b> ${inv.num}</p>
+     <p style="margin:0"><b>${t("invDateLbl")}</b> ${inv.date}</p>
     </div>
    </div>
    <div style="margin:14px 0;padding:10px;border:1px solid #000;background:#f8fafc;color:#000">
-    <strong>${t('invClientLbl')}</strong> ${inv.clientName} ${inv.clientNif ? '<br><strong>RC / NIF:</strong> '+inv.clientNif : ''}
+    <strong>${t("invClientLbl")}</strong> ${inv.clientName} ${inv.clientNif ? "<br><strong>RC / NIF:</strong> "+inv.clientNif : ""}
    </div>
    <table style="width:100%;border-collapse:collapse;margin:12px 0;color:#000;background:#fff">
     <thead>
      <tr>
       <th style="padding:8px;text-align:center;width:40px">#</th>
-      <th style="padding:8px">${t('thDes')}</th>
-      <th style="padding:8px;text-align:center">${t('thQty')}</th>
-      ${isBLSansPrix ? '' : `<th style="padding:8px">${t('thPrice')}</th><th style="padding:8px">${t('thTot')}</th>`}
+      <th style="padding:8px">${t("thDes")}</th>
+      <th style="padding:8px;text-align:center">${t("thQty")}</th>
+      ${isBLSansPrix ? "" : `<th style="padding:8px">${t("thPrice")}</th><th style="padding:8px">${t("thTot")}</th>`}
      </tr>
     </thead>
     <tbody>${rows}</tbody>
    </table>
-   ${isBLSansPrix ? '' : `
+   ${isBLSansPrix ? "" : `
    <div style="width:270px;margin-inline-start:auto;border:2px solid #000;padding:10px;line-height:1.8;background:#f8fafc;color:#000">
-    <div style="display:flex;justify-content:space-between"><span>Total HT:</span><b>${inv.ht.toLocaleString()} ${t('curr')}</b></div>
-    <div style="display:flex;justify-content:space-between"><span>TVA (${inv.tvaRate}%):</span><b>${(inv.ttc-inv.ht).toLocaleString()} ${t('curr')}</b></div>
-    <div style="display:flex;justify-content:space-between;font-size:1.1rem;border-top:1px solid #000;padding-top:4px"><span>Total TTC:</span><b>${inv.ttc.toLocaleString()} ${t('curr')}</b></div>
+    <div style="display:flex;justify-content:space-between"><span>Total HT:</span><b>${inv.ht.toLocaleString()} ${t("curr")}</b></div>
+    <div style="display:flex;justify-content:space-between"><span>TVA (${inv.tvaRate}%):</span><b>${(inv.ttc-inv.ht).toLocaleString()} ${t("curr")}</b></div>
+    <div style="display:flex;justify-content:space-between;font-size:1.1rem;border-top:1px solid #000;padding-top:4px"><span>Total TTC:</span><b>${inv.ttc.toLocaleString()} ${t("curr")}</b></div>
    </div>`}
    <div style="margin-top:35px;margin-bottom:15px;display:flex;justify-content:space-between;font-weight:bold;color:#000">
-    <div>${t('signCli')}</div>
-    <div>${t('signComp')}</div>
+    <div>${t("signCli")}</div>
+    <div>${t("signComp")}</div>
    </div>
   </div>
  `;
- document.getElementById('printModal').style.display = 'block';
+ document.getElementById("printModal").style.display = "block";
 }
 
 function shareCurrentInvoice(){
  if(!activeInvoice) return;
  let inv = activeInvoice;
  let docTitle = dict[lang].docTitles[inv.type] || inv.type;
- let txt = `📄 *MESSAOUD COLORS*
-`;
- txt += `*${docTitle}* (${inv.num})
-`;
- txt += `📅 ${t('invDateLbl')} ${inv.date}
-`;
- txt += `👤 ${t('invClientLbl')} ${inv.clientName}
-`;
- txt += `------------------------
-`;
+ let txt = `📄 *MESSAOUD GESTION PRO*\n`;
+ txt += `*${docTitle}* (${inv.num})\n`;
+ txt += `📅 ${t("invDateLbl")} ${inv.date}\n`;
+ txt += `👤 ${t("invClientLbl")} ${inv.clientName}\n`;
+ txt += `------------------------\n`;
  inv.items.forEach((it, idx)=>{
   if(inv.ttc > 0){
-   txt += `${idx+1}. *${it.name}* : ${it.qty} x ${it.price.toLocaleString()} = *${it.total.toLocaleString()} ${t('curr')}*
-`;
+   txt += `${idx+1}. *${it.name}* : ${it.qty} x ${it.price.toLocaleString()} = *${it.total.toLocaleString()} ${t("curr")}*\n`;
   } else {
-   txt += `${idx+1}. *${it.name}* | ${t('thQty')}: *${it.qty}*
-`;
+   txt += `${idx+1}. *${it.name}* | ${t("thQty")}: *${it.qty}*\n`;
   }
  });
- txt += `------------------------
-`;
+ txt += `------------------------\n`;
  if(inv.ttc > 0){
-  txt += `▪️ Total HT: ${inv.ht.toLocaleString()} ${t('curr')}
-`;
-  if(inv.tvaRate > 0) txt += `▪️ TVA (${inv.tvaRate}%): ${(inv.ttc-inv.ht).toLocaleString()} ${t('curr')}
-`;
-  txt += `💰 *Total TTC: ${inv.ttc.toLocaleString()} ${t('curr')}*
-`;
+  txt += `▪️ Total HT: ${inv.ht.toLocaleString()} ${t("curr")}\n`;
+  if(inv.tvaRate > 0) txt += `▪️ TVA (${inv.tvaRate}%): ${(inv.ttc-inv.ht).toLocaleString()} ${t("curr")}\n`;
+  txt += `💰 *Total TTC: ${inv.ttc.toLocaleString()} ${t("curr")}*\n`;
  }
 
  if(window.AndroidBridge && window.AndroidBridge.shareInvoice){
@@ -546,7 +533,7 @@ function shareCurrentInvoice(){
  } else if(navigator.share){
   navigator.share({ title: docTitle, text: txt });
  } else {
-  navigator.clipboard.writeText(txt).then(()=>alert('Copied!'));
+  navigator.clipboard.writeText(txt).then(()=>alert("Copied!"));
  }
 }
 
@@ -559,33 +546,33 @@ function triggerAndroidPrint(){
 }
 
 function closePrintModal(){
- document.getElementById('printModal').style.display = 'none';
+ document.getElementById("printModal").style.display = "none";
 }
 
 function renderAll(){
- let totalSales = db.invoices.filter(i=>i.type!=='PROFORMA').reduce((a,b)=>a+b.ttc, 0);
+ let totalSales = db.invoices.filter(i=>i.type!=="PROFORMA").reduce((a,b)=>a+b.ttc, 0);
  let stockVal = db.products.reduce((a,b)=>a+(b.buy*b.qty), 0);
  let cDebt = db.clients.reduce((a,b)=>a+b.debt, 0);
  let sDebt = db.suppliers.reduce((a,b)=>a+b.debt, 0);
- document.getElementById('st-sales').innerText = totalSales.toLocaleString() + ' ' + t('curr');
- document.getElementById('st-stock').innerText = stockVal.toLocaleString() + ' ' + t('curr');
- document.getElementById('st-cdebt').innerText = cDebt.toLocaleString() + ' ' + t('curr');
- document.getElementById('st-sdebt').innerText = sDebt.toLocaleString() + ' ' + t('curr');
+ document.getElementById("st-sales").innerText = totalSales.toLocaleString() + " " + t("curr");
+ document.getElementById("st-stock").innerText = stockVal.toLocaleString() + " " + t("curr");
+ document.getElementById("st-cdebt").innerText = cDebt.toLocaleString() + " " + t("curr");
+ document.getElementById("st-sdebt").innerText = sDebt.toLocaleString() + " " + t("curr");
 
- document.getElementById('low-stock-tb').innerHTML = db.products.filter(p=>p.qty<=p.min).map(p=>`<tr><td>${p.name}</td><td style="color:var(--danger);font-weight:bold">${p.qty}</td><td>${p.sell.toLocaleString()} ${t('curr')}</td></tr>`).join('') || `<tr><td colspan="3">OK</td></tr>`;
+ document.getElementById("low-stock-tb").innerHTML = db.products.filter(p=>p.qty<=p.min).map(p=>`<tr><td>${p.name}</td><td style="color:var(--danger);font-weight:bold">${p.qty}</td><td>${p.sell.toLocaleString()} ${t("curr")}</td></tr>`).join("") || `<tr><td colspan="3">OK</td></tr>`;
 
- document.getElementById('recent-inv-tb').innerHTML = db.invoices.slice(0,15).map(i=>`<tr><td><b>${i.num}</b><br><small style="color:var(--mut)">${i.type}</small></td><td>${i.clientName}</td><td>${i.ttc.toLocaleString()} ${t('curr')}</td><td><button class="del" style="background:var(--sec);color:#fff;padding:6px 10px" onclick="showInvoicePreview(${i.id})">${t('viewBtn')}</button></td></tr>`).join('') || `<tr><td colspan="4">-</td></tr>`;
+ document.getElementById("recent-inv-tb").innerHTML = db.invoices.slice(0,15).map(i=>`<tr><td><b>${i.num}</b><br><small style="color:var(--mut)">${i.type}</small></td><td>${i.clientName}</td><td>${i.ttc.toLocaleString()} ${t("curr")}</td><td><button type="button" class="del" style="background:var(--sec);color:#fff;padding:6px 10px" onclick="showInvoicePreview(${i.id})">${t("viewBtn")}</button></td></tr>`).join("") || `<tr><td colspan="4">-</td></tr>`;
 
- let q = (document.getElementById('search-stock').value||'').toLowerCase();
+ let q = (document.getElementById("search-stock").value||"").toLowerCase();
  let flt = db.products.filter(p=>p.name.toLowerCase().includes(q));
- document.getElementById('stock-count').innerText = db.products.length;
- document.getElementById('stock-tb').innerHTML = flt.map(p=>`<tr><td>${p.name}</td><td style="font-weight:bold;color:${p.qty<=p.min?'var(--danger)':'var(--sec)'}">${p.qty}</td><td>${p.buy.toLocaleString()}</td><td>${p.sell.toLocaleString()}</td><td><button class="del" onclick="delProd(${p.id})">X</button></td></tr>`).join('') || `<tr><td colspan="5">-</td></tr>`;
+ document.getElementById("stock-count").innerText = db.products.length;
+ document.getElementById("stock-tb").innerHTML = flt.map(p=>`<tr><td>${p.name}</td><td style="font-weight:bold;color:${p.qty<=p.min?"var(--danger)":"var(--sec)"}">${p.qty}</td><td>${p.buy.toLocaleString()}</td><td>${p.sell.toLocaleString()}</td><td><button type="button" class="del" onclick="delProd(${p.id})">X</button></td></tr>`).join("") || `<tr><td colspan="5">-</td></tr>`;
 
- document.getElementById('inv-client').innerHTML = db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
- document.getElementById('inv-prod').innerHTML = `<option value="">${t('chooseStock')}</option>` + db.products.map(p=>`<option value="${p.id}">${p.name} (${p.qty})</option>`).join('');
+ document.getElementById("inv-client").innerHTML = db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+ document.getElementById("inv-prod").innerHTML = `<option value="">${t("chooseStock")}</option>` + db.products.map(p=>`<option value="${p.id}">${p.name} (${p.qty})</option>`).join("");
 
- document.getElementById('cli-tb').innerHTML = db.clients.map(c=>`<tr><td>${c.name}<br><small style="color:var(--mut)">${c.nif}</small></td><td>${c.phone}</td><td style="color:var(--danger);font-weight:bold">${c.debt.toLocaleString()} ${t('curr')}</td><td><button class="del" style="background:var(--sec)" onclick="payClientDebt(${c.id})">${t('payBtn')}</button></td></tr>`).join('');
- document.getElementById('sup-tb').innerHTML = db.suppliers.map(s=>`<tr><td>${s.name}</td><td>${s.phone}</td><td style="color:var(--blue);font-weight:bold">${s.debt.toLocaleString()} ${t('curr')}</td><td><button class="del" style="background:var(--pri);color:#000" onclick="paySupDebt(${s.id})">${t('payBtn')}</button></td></tr>`).join('') || `<tr><td colspan="4">-</td></tr>`;
+ document.getElementById("cli-tb").innerHTML = db.clients.map(c=>`<tr><td>${c.name}<br><small style="color:var(--mut)">${c.nif}</small></td><td>${c.phone}</td><td style="color:var(--danger);font-weight:bold">${c.debt.toLocaleString()} ${t("curr")}</td><td><button type="button" class="del" style="background:var(--sec)" onclick="payClientDebt(${c.id})">${t("payBtn")}</button></td></tr>`).join("");
+ document.getElementById("sup-tb").innerHTML = db.suppliers.map(s=>`<tr><td>${s.name}</td><td>${s.phone}</td><td style="color:var(--blue);font-weight:bold">${s.debt.toLocaleString()} ${t("curr")}</td><td><button type="button" class="del" style="background:var(--pri);color:#000" onclick="paySupDebt(${s.id})">${t("payBtn")}</button></td></tr>`).join("") || `<tr><td colspan="4">-</td></tr>`;
 }
 
 applyLang();
