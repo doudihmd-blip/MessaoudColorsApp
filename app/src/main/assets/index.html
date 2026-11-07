@@ -18,8 +18,10 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:12px 14px;bord
 .stat div{font-size:1.05rem;font-weight:bold;color:#fff}
 .card{background:var(--card);border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid var(--brd)}
 .card h3{color:var(--pri);font-size:.95rem;margin-bottom:10px;border-bottom:1px solid var(--brd);padding-bottom:6px;display:flex;justify-content:space-between}
+.sub-box{background:#131c2e;border:1px dashed var(--pri);padding:10px;border-radius:8px;margin-top:8px}
 label{display:block;margin:8px 0 3px;font-size:.8rem;color:var(--mut)}
 input,select{width:100%;padding:9px;border-radius:6px;border:1px solid var(--brd);background:#090d16;color:#fff;font-size:.9rem}
+input:focus,select:focus{border-color:var(--pri);outline:none}
 .row-inp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 button{width:100%;padding:10px;background:var(--pri);color:#000;border:none;border-radius:6px;font-weight:bold;margin-top:10px;cursor:pointer;font-size:.88rem}
 button.sec{background:var(--sec);color:#fff}
@@ -32,11 +34,11 @@ th{color:var(--pri);background:#090d16}
 .nav button{background:none;color:var(--mut);margin:0;padding:4px;font-size:.72rem;display:flex;flex-direction:column;align-items:center;width:auto}
 .nav button.active{color:var(--pri);font-weight:bold}
 
-/* شاشة معاينة وطباعة الفاتورة - إصلاح تام للرؤية والطباعة */
+/* شاشة معاينة وطباعة الفاتورة */
 #printModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;color:#000;z-index:9999;overflow-y:auto;padding:12px}
 .no-print-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;background:#0f172a;padding:10px;border-radius:8px}
 .no-print-bar button{margin:0;padding:10px 6px;font-size:.82rem}
-#invoicePaper table th{background-color:#f1f5f9 !important;color:#000000 !important;font-weight:bold !important;border:1px solid #000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#invoicePaper table th{background-color:#e2e8f0 !important;color:#000000 !important;font-weight:bold !important;border:1px solid #000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 #invoicePaper table td{background-color:#ffffff !important;color:#000000 !important;border:1px solid #000 !important}
 @media print{
  body{background:#fff !important;padding:0 !important}
@@ -64,7 +66,7 @@ th{color:var(--pri);background:#090d16}
   <div class="stat" style="border-color:var(--blue)"><h4 data-i18n="supDebt">مستحقات الموردين</h4><div id="st-sdebt">0</div></div>
  </div>
  <div class="card">
-  <h3><span data-i18n="recentInv">آخر الفواتير والعروض المحفوظة</span></h3>
+  <h3><span data-i18n="recentInv">آخر الفواتير والوثائق المحفوظة</span></h3>
   <table><thead><tr><th data-i18n="thDoc">الوثيقة</th><th data-i18n="thCli">الزبون</th><th data-i18n="thAmt">المبلغ TTC</th><th data-i18n="thAct">إجراء</th></tr></thead><tbody id="recent-inv-tb"></tbody></table>
  </div>
  <div class="card">
@@ -96,7 +98,7 @@ th{color:var(--pri);background:#090d16}
  </div>
 </div>
 
-<!-- 3. الفواتير والبروفرما -->
+<!-- 3. الفواتير والبروفرما ووصل التسليم -->
 <div id="t-inv" class="tab">
  <div class="card">
   <h3 data-i18n="newDocTitle">إصدار وثيقة (Proforma / Facture / BL)</h3>
@@ -114,21 +116,25 @@ th{color:var(--pri);background:#090d16}
     <select id="inv-client"></select>
    </div>
   </div>
-  <div class="row-inp">
-   <div>
-    <label data-i18n="lblFromStock">اختر من المخزون:</label>
-    <select id="inv-prod" onchange="fillProdPrice()"></select>
+
+  <!-- مربع إدخال السلعة والسعر بوضوح -->
+  <div class="sub-box">
+   <div class="row-inp">
+    <div>
+     <label data-i18n="lblFromStock">اختر سلعة من المخزون:</label>
+     <select id="inv-prod" onchange="fillProdPrice()"></select>
+    </div>
+    <div>
+     <label data-i18n="lblCustomItem">أو اكتب اسم السلعة يدوياً:</label>
+     <input id="inv-custom" placeholder="مثال: دهان / معجون...">
+    </div>
    </div>
-   <div>
-    <label data-i18n="lblCustomItem">أو كتابة اسم السلعة يدوياً:</label>
-    <input id="inv-custom" placeholder="Satiné / Enduit...">
+   <div class="row-inp">
+    <div><label data-i18n="thQty">الكمية (Quantité):</label><input type="number" id="inv-qty" value="1"></div>
+    <div><label style="color:var(--pri);font-weight:bold" data-i18n="lblUnitPrice">سعر الوحدة (Prix Unitaire):</label><input type="number" id="inv-price" placeholder="أدخل السعر هنا (أو 0 للبون)" style="border-color:var(--pri)"></div>
    </div>
+   <button onclick="addInvItem()" data-i18n="btnInsert">+ إدراج السلعة في الجدول</button>
   </div>
-  <div class="row-inp">
-   <div><label data-i18n="thQty">الكمية:</label><input type="number" id="inv-qty" value="1"></div>
-   <div><label data-i18n="lblUnitPrice">سعر الوحدة:</label><input type="number" id="inv-price" placeholder="0.00"></div>
-  </div>
-  <button onclick="addInvItem()" data-i18n="btnInsert">+ إدراج في الوثيقة</button>
 
   <table style="margin-top:12px"><thead><tr><th data-i18n="thDes">البيان</th><th data-i18n="thQty">الكمية</th><th data-i18n="thPrice">السعر</th><th data-i18n="thTot">الإجمالي</th><th></th></tr></thead><tbody id="curr-inv-tb"></tbody></table>
 
@@ -141,7 +147,7 @@ th{color:var(--pri);background:#090d16}
     </select>
    </div>
    <div>
-    <label data-i18n="lblPaid">المبلغ المدفوع (Versement):</label><input type="number" id="inv-paid" value="0" oninput="renderCurrInv()">
+    <label data-i18n="lblPaid">العربون / المدفوع (Versement):</label><input type="number" id="inv-paid" value="0" oninput="renderCurrInv()">
    </div>
   </div>
   <div id="inv-totals" style="margin-top:10px;padding:10px;background:#090d16;border-radius:6px;line-height:1.7"></div>
@@ -193,7 +199,7 @@ th{color:var(--pri);background:#090d16}
  <div class="no-print-bar">
   <button class="sec" onclick="triggerAndroidPrint()">🖨️ PDF / Print</button>
   <button class="share" onclick="shareCurrentInvoice()">📲 WhatsApp / Messenger</button>
-  <button style="grid-column:span 2;background:var(--danger);color:#fff" onclick="closePrintModal()">✖ إغلاق / Fermer</button>
+  <button style="grid-column:span 2;background:var(--danger);color:#fff" onclick="closePrintModal()">✖ إغلاق المعاينة / Fermer</button>
  </div>
  <div id="invoicePaper"></div>
 </div>
@@ -211,30 +217,30 @@ const dict = {
  ar: {
   sub: "النظام التجاري المتكامل للتسيير والفوترة",
   totSales: "إجمالي المبيعات", stockVal: "قيمة المخزون", cliDebt: "ديون الزبائن (Crédit)", supDebt: "مستحقات الموردين",
-  recentInv: "آخر الفواتير والعروض المحفوظة", lowStock: "تنبيهات المخزون المنخفض",
+  recentInv: "آخر الفواتير والوثائق المحفوظة", lowStock: "تنبيهات المخزون المنخفض",
   thDoc: "الوثيقة", thCli: "الزبون", thAmt: "المبلغ TTC", thAct: "إجراء", thProd: "السلعة", thQty: "الكمية", thPrice: "السعر", thDes: "البيان (Désignation)", thTot: "الإجمالي", thSup: "المورد",
   addProdTitle: "إضافة منتج جديد للمخزون", lblProdName: "اسم السلعة / المادة:", lblBuy: "سعر الشراء:", lblSell: "سعر البيع:", lblQty: "الكمية المتوفرة:", lblMin: "حد التنبيه:", btnAddStock: "+ إضافة للمخزون", stockList: "جرد المخزون",
-  newDocTitle: "إصدار وثيقة (Proforma / Facture / BL)", lblDocType: "نوع الوثيقة:", lblSelectCli: "الزبون / الشركة:", lblFromStock: "اختر من المخزون:", lblCustomItem: "أو كتابة اسم السلعة يدوياً:", lblUnitPrice: "سعر الوحدة:", btnInsert: "+ إدراج في الوثيقة", lblPaid: "المبلغ المدفوع (Versement):", btnSavePrint: "🖨️ حفظ ومعاينة / مشاركة", btnSaveOnly: "💾 حفظ فقط",
+  newDocTitle: "إصدار وثيقة (Proforma / Facture / BL)", lblDocType: "نوع الوثيقة:", lblSelectCli: "الزبون / الشركة:", lblFromStock: "اختر سلعة من المخزون:", lblCustomItem: "أو اكتب اسم السلعة يدوياً:", lblUnitPrice: "سعر الوحدة (Prix):", btnInsert: "+ إدراج السلعة في الجدول", lblPaid: "العربون / المدفوع (Versement):", btnSavePrint: "🖨️ حفظ ومعاينة / مشاركة", btnSaveOnly: "💾 حفظ فقط",
   addCliTitle: "إضافة زبون / مؤسسة", lblPhone: "رقم الهاتف:", lblPrevDebt: "الدين السابق:", btnAddCli: "+ حفظ الزبون", cliList: "قائمة الزبائن والديون",
   addSupTitle: "إضافة مورد أو مصنع", btnAddSup: "+ حفظ المورد", supList: "دفتر الموردين والشركات",
   navDash: "الرئيسية", navStock: "المخزون", navInv: "الفواتير", navCli: "الزبائن", navSup: "الموردين",
   curr: "د.ج", chooseStock: "-- اختر من المخزون --", payBtn: "تسديد", viewBtn: "📄 عرض / مشاركة",
-  docTitles: { "PROFORMA": "فاتورة شكلية - FACTURE PROFORMA", "FACTURE": "فاتورة - FACTURE", "BON DE LIVRAISON": "وصل تسليم - BON DE LIVRAISON" },
-  invClientLbl: "السيد / المؤسسة:", invDateLbl: "التاريخ:", invNumLbl: "الرقم:", signCli: "إمضاء الزبون:", signComp: "الختم والإمضاء:"
+  docTitles: { "PROFORMA": "فاتورة شكلية - FACTURE PROFORMA", "FACTURE": "فاتورة نهائية - FACTURE", "BON DE LIVRAISON": "وصل تسليم - BON DE LIVRAISON" },
+  invClientLbl: "السيد / المؤسسة:", invDateLbl: "التاريخ:", invNumLbl: "الرقم:", signCli: "استلام الزبون:", signComp: "الختم والإمضاء:"
  },
  fr: {
   sub: "Système ERP Commercial & Facturation Pro",
   totSales: "Chiffre d'Affaires", stockVal: "Valeur du Stock", cliDebt: "Crédits Clients", supDebt: "Dettes Fournisseurs",
-  recentInv: "Dernières Factures & Proformas", lowStock: "Alertes Stock Faible",
+  recentInv: "Derniers Documents Enregistrés", lowStock: "Alertes Stock Faible",
   thDoc: "Document", thCli: "Client", thAmt: "Total TTC", thAct: "Action", thProd: "Article", thQty: "Qté", thPrice: "P.U", thDes: "Désignation", thTot: "Total HT", thSup: "Fournisseur",
   addProdTitle: "Ajouter un Article au Stock", lblProdName: "Désignation de l'article:", lblBuy: "Prix d'Achat:", lblSell: "Prix de Vente:", lblQty: "Quantité:", lblMin: "Seuil d'alerte:", btnAddStock: "+ Ajouter au Stock", stockList: "Inventaire du Stock",
-  newDocTitle: "Établir (Proforma / Facture / BL)", lblDocType: "Type de Document:", lblSelectCli: "Client / Société:", lblFromStock: "Choisir du Stock:", lblCustomItem: "Ou saisir article manuellement:", lblUnitPrice: "Prix Unitaire:", btnInsert: "+ Insérer dans le document", lblPaid: "Versement payé:", btnSavePrint: "🖨️ Valider, Aperçu & Partager", btnSaveOnly: "💾 Enregistrer",
+  newDocTitle: "Établir (Proforma / Facture / BL)", lblDocType: "Type de Document:", lblSelectCli: "Client / Société:", lblFromStock: "Choisir du Stock:", lblCustomItem: "Ou saisir article manuellement:", lblUnitPrice: "Prix Unitaire:", btnInsert: "+ Insérer l'article au tableau", lblPaid: "Versement payé:", btnSavePrint: "🖨️ Valider, Aperçu & Partager", btnSaveOnly: "💾 Enregistrer",
   addCliTitle: "Ajouter un Client / Entreprise", lblPhone: "Téléphone:", lblPrevDebt: "Ancien Crédit:", btnAddCli: "+ Enregistrer Client", cliList: "Liste des Clients & Crédits",
   addSupTitle: "Ajouter un Fournisseur", btnAddSup: "+ Enregistrer Fournisseur", supList: "Liste des Fournisseurs",
   navDash: "Accueil", navStock: "Stock", navInv: "Factures", navCli: "Clients", navSup: "Fournisseurs",
   curr: "DA", chooseStock: "-- Choisir du stock --", payBtn: "Régler", viewBtn: "📄 Voir / Partager",
   docTitles: { "PROFORMA": "FACTURE PROFORMA", "FACTURE": "FACTURE", "BON DE LIVRAISON": "BON DE LIVRAISON" },
-  invClientLbl: "Client / Société:", invDateLbl: "Date:", invNumLbl: "N°:", signCli: "Signature Client:", signComp: "Cachet et Signature:"
+  invClientLbl: "Client / Société:", invDateLbl: "Date:", invNumLbl: "N°:", signCli: "Réception Client:", signComp: "Cachet et Signature:"
  }
 };
 
@@ -247,7 +253,7 @@ let db = JSON.parse(localStorage.getItem('messaoudColorsERP')) || {
 };
 let currItems = [];
 let activeInvoice = null;
-let currentPrintJobName = "Facture_Messaoud_Colors";
+let currentPrintJobName = "Document_Messaoud_Colors";
 
 function t(k){ return dict[lang][k] || k; }
 
@@ -285,7 +291,7 @@ function addProduct(){
  let sell=+document.getElementById('p-sell').value||0;
  let qty=+document.getElementById('p-qty').value||0;
  let min=+document.getElementById('p-min').value||5;
- if(!name||sell<=0) return alert(lang==='ar'?'أدخل اسم السلعة وسعر البيع':'Veuillez saisir le nom et le prix de vente');
+ if(!name) return alert(lang==='ar'?'أدخل اسم السلعة':'Veuillez saisir le nom de l'article');
  db.products.push({id:Date.now(), name, buy, sell, qty, min});
  document.getElementById('p-name').value=''; document.getElementById('p-buy').value=''; document.getElementById('p-sell').value=''; document.getElementById('p-qty').value='';
  saveDB();
@@ -339,14 +345,26 @@ function fillProdPrice(){
  }
 }
 
+// دالة إدراج ذكية تقبل أي سلعة حتى لو كان السعر 0 (مهم جداً للبون Bon de Livraison)
 function addInvItem(){
+ let docType = document.getElementById('inv-type').value;
  let custom = document.getElementById('inv-custom').value.trim();
  let pid = +document.getElementById('inv-prod').value;
  let p = db.products.find(x=>x.id===pid);
- let name = custom ? custom : (p ? p.name : 'Article');
  let qty = +document.getElementById('inv-qty').value||1;
  let price = +document.getElementById('inv-price').value||0;
- if(price <= 0) return alert(lang==='ar'?'الرجاء إدخال السعر':'Veuillez saisir le prix');
+ let paidVal = +document.getElementById('inv-paid').value||0;
+
+ // إذا وضع المستخدم السعر بالخطأ في خانة Versement بينما السعر 0، نلتقطه تلقائياً!
+ if(price === 0 && paidVal > 0 && currItems.length === 0){
+  price = paidVal;
+ }
+
+ let name = custom ? custom : (p ? p.name : '');
+ if(!name){
+  name = (lang === 'ar') ? 'سلعة / بضاعة' : 'Marchandise / Article';
+ }
+
  currItems.push({pid: p?p.id:null, name, qty, price, total: qty*price});
  document.getElementById('inv-custom').value='';
  document.getElementById('inv-prod').value='';
@@ -360,9 +378,9 @@ function renderCurrInv(){
  let ht = 0, html = '';
  currItems.forEach((it, idx)=>{
   ht += it.total;
-  html += `<tr><td>${it.name}</td><td>${it.qty}</td><td>${it.price.toLocaleString()}</td><td>${it.total.toLocaleString()}</td><td><button class="del" onclick="currItems.splice(${idx},1);renderCurrInv()">X</button></td></tr>`;
+  html += `<tr><td><b>${it.name}</b></td><td>${it.qty}</td><td>${it.price.toLocaleString()}</td><td>${it.total.toLocaleString()}</td><td><button class="del" onclick="currItems.splice(${idx},1);renderCurrInv()">X</button></td></tr>`;
  });
- tb.innerHTML = html;
+ tb.innerHTML = html || `<tr><td colspan="5" style="text-align:center;color:var(--mut)">${lang==='ar'?'لم يتم إدراج سلع في الجدول بعد':'Aucun article inséré'}</td></tr>`;
  let tvaRate = +document.getElementById('inv-tva').value;
  let tva = Math.round(ht * (tvaRate/100));
  let ttc = ht + tva;
@@ -377,13 +395,22 @@ function renderCurrInv(){
 }
 
 function saveAndPrintInv(doPrint){
- let price = +document.getElementById('inv-price').value||0;
- let custom = document.getElementById('inv-custom').value.trim();
- if(currItems.length === 0 && price > 0){
-  if(!custom) document.getElementById('inv-custom').value = 'Article';
-  addInvItem();
+ // إذا لم يضغط المستخدم على زر الإدراج، نقوم بإدراج البيانات الموجودة في الخانات تلقائياً!
+ if(currItems.length === 0){
+  let custom = document.getElementById('inv-custom').value.trim();
+  let pid = +document.getElementById('inv-prod').value;
+  let price = +document.getElementById('inv-price').value||0;
+  let paid = +document.getElementById('inv-paid').value||0;
+  let type = document.getElementById('inv-type').value;
+
+  if(custom || pid || price > 0 || paid > 0 || type === 'BON DE LIVRAISON'){
+   addInvItem();
+  }
  }
- if(currItems.length === 0) return alert(lang==='ar'?'الفاتورة فارغة!':'Document vide!');
+
+ if(currItems.length === 0){
+  return alert(lang==='ar'?'الرجاء كتابة اسم السلعة أو السعر أولاً!':'Veuillez saisir un article ou un montant !');
+ }
  
  let type = document.getElementById('inv-type').value;
  let cid = +document.getElementById('inv-client').value;
@@ -401,7 +428,7 @@ function saveAndPrintInv(doPrint){
     if(pr) pr.qty = Math.max(0, pr.qty - it.qty);
    }
   });
-  if(rest > 0) client.debt += rest;
+  if(rest > 0 && type === 'FACTURE') client.debt += rest;
  }
 
  let inv = {
@@ -413,6 +440,7 @@ function saveAndPrintInv(doPrint){
  };
  db.invoices.unshift(inv);
  currItems = [];
+ document.getElementById('inv-paid').value = '0';
  renderCurrInv();
  saveDB();
  
@@ -427,13 +455,14 @@ function showInvoicePreview(id){
  let docTitle = dict[lang].docTitles[inv.type] || inv.type;
  currentPrintJobName = inv.type + "_" + inv.clientName;
  
+ let isBLSansPrix = (inv.type === 'BON DE LIVRAISON' && inv.ttc === 0);
+
  let rows = inv.items.map((it,i)=>`
   <tr>
    <td style="padding:8px;text-align:center">${i+1}</td>
    <td style="padding:8px;font-weight:bold">${it.name}</td>
-   <td style="padding:8px;text-align:center">${it.qty}</td>
-   <td style="padding:8px">${it.price.toLocaleString()} ${t('curr')}</td>
-   <td style="padding:8px;font-weight:bold">${it.total.toLocaleString()} ${t('curr')}</td>
+   <td style="padding:8px;text-align:center;font-weight:bold">${it.qty}</td>
+   ${isBLSansPrix ? '' : `<td style="padding:8px">${it.price.toLocaleString()} ${t('curr')}</td><td style="padding:8px;font-weight:bold">${it.total.toLocaleString()} ${t('curr')}</td>`}
   </tr>`).join('');
  
  document.getElementById('invoicePaper').innerHTML = `
@@ -444,7 +473,7 @@ function showInvoicePreview(id){
      <p style="margin:4px 0;font-size:12px;color:#333">${t('sub')}</p>
     </div>
     <div style="text-align:${lang==='ar'?'left':'right'}">
-     <div style="background:#f1f5f9;color:#000;border:2px solid #000;padding:5px 12px;font-weight:bold;font-size:1rem;display:inline-block">${docTitle}</div>
+     <div style="background:#e2e8f0;color:#000;border:2px solid #000;padding:5px 12px;font-weight:bold;font-size:1rem;display:inline-block">${docTitle}</div>
      <p style="margin:4px 0"><b>${t('invNumLbl')}</b> ${inv.num}</p>
      <p style="margin:0"><b>${t('invDateLbl')}</b> ${inv.date}</p>
     </div>
@@ -458,17 +487,17 @@ function showInvoicePreview(id){
       <th style="padding:8px;text-align:center;width:40px">#</th>
       <th style="padding:8px">${t('thDes')}</th>
       <th style="padding:8px;text-align:center">${t('thQty')}</th>
-      <th style="padding:8px">${t('thPrice')}</th>
-      <th style="padding:8px">${t('thTot')}</th>
+      ${isBLSansPrix ? '' : `<th style="padding:8px">${t('thPrice')}</th><th style="padding:8px">${t('thTot')}</th>`}
      </tr>
     </thead>
     <tbody>${rows}</tbody>
    </table>
+   ${isBLSansPrix ? '' : `
    <div style="width:270px;margin-inline-start:auto;border:2px solid #000;padding:10px;line-height:1.8;background:#f8fafc;color:#000">
     <div style="display:flex;justify-content:space-between"><span>Total HT:</span><b>${inv.ht.toLocaleString()} ${t('curr')}</b></div>
     <div style="display:flex;justify-content:space-between"><span>TVA (${inv.tvaRate}%):</span><b>${(inv.ttc-inv.ht).toLocaleString()} ${t('curr')}</b></div>
     <div style="display:flex;justify-content:space-between;font-size:1.1rem;border-top:1px solid #000;padding-top:4px"><span>Total TTC:</span><b>${inv.ttc.toLocaleString()} ${t('curr')}</b></div>
-   </div>
+   </div>`}
    <div style="margin-top:35px;margin-bottom:15px;display:flex;justify-content:space-between;font-weight:bold;color:#000">
     <div>${t('signCli')}</div>
     <div>${t('signComp')}</div>
@@ -493,17 +522,24 @@ function shareCurrentInvoice(){
  txt += `------------------------
 `;
  inv.items.forEach((it, idx)=>{
-  txt += `${idx+1}. *${it.name}* : ${it.qty} x ${it.price.toLocaleString()} = *${it.total.toLocaleString()} ${t('curr')}*
+  if(inv.ttc > 0){
+   txt += `${idx+1}. *${it.name}* : ${it.qty} x ${it.price.toLocaleString()} = *${it.total.toLocaleString()} ${t('curr')}*
 `;
+  } else {
+   txt += `${idx+1}. *${it.name}* | ${t('thQty')}: *${it.qty}*
+`;
+  }
  });
  txt += `------------------------
 `;
- txt += `▪️ Total HT: ${inv.ht.toLocaleString()} ${t('curr')}
+ if(inv.ttc > 0){
+  txt += `▪️ Total HT: ${inv.ht.toLocaleString()} ${t('curr')}
 `;
- if(inv.tvaRate > 0) txt += `▪️ TVA (${inv.tvaRate}%): ${(inv.ttc-inv.ht).toLocaleString()} ${t('curr')}
+  if(inv.tvaRate > 0) txt += `▪️ TVA (${inv.tvaRate}%): ${(inv.ttc-inv.ht).toLocaleString()} ${t('curr')}
 `;
- txt += `💰 *Total TTC: ${inv.ttc.toLocaleString()} ${t('curr')}*
+  txt += `💰 *Total TTC: ${inv.ttc.toLocaleString()} ${t('curr')}*
 `;
+ }
 
  if(window.AndroidBridge && window.AndroidBridge.shareInvoice){
   window.AndroidBridge.shareInvoice(txt);
