@@ -3,6 +3,7 @@ package com.messaoud.colors
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
@@ -37,6 +38,17 @@ class MainActivity : Activity() {
                 builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4)
                 printManager.print(jobName, printAdapter, builder.build())
             }
+        }
+
+        @JavascriptInterface
+        fun shareInvoice(text: String) {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
     }
 
